@@ -1,7 +1,8 @@
-package com.harlie.dogs
+package com.harlie.dogs.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.harlie.dogs.R
 
 class MainActivity : AppCompatActivity() {
 

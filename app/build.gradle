@@ -63,21 +63,36 @@ dependencies {
 
     implementation "com.android.support:multidex:$multidex_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtension_version"
+
+    // Room
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.legacy:legacy-support-v4:$legacySupport_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation "com.google.android.material:material:$material_version"
+
+    // Navigation
+    implementation "android.arch.navigation:navigation-common-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-runtime-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+
+    // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+    // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxJava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroid_version"
+
+    // Glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "androidx.palette:palette:$palette_version"
+
+    // Misc
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    implementation "com.google.android.material:material:$material_version"
     implementation "androidx.preference:preference:$preferences_version"
 
     testImplementation "junit:junit:$junit_version"
