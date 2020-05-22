@@ -6,17 +6,21 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.harlie.dogs.view.ListFragment"
-        android:label="ListFragment" >
+        android:label="Dogs List" >
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:popUpTo="@+id/detailFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.harlie.dogs.view.DetailFragment"
-        android:label="DetailFragment" >
+        android:label="Dogs Detail" >
         <action
             android:id="@+id/action_detailFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/listFragment"
+            app:popUpTo="@+id/listFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

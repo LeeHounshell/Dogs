@@ -26,9 +26,9 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        buttonShowList.setOnClickListener {view ->
+        buttonShowList.setOnClickListener {button ->
             val action: NavDirections = DetailFragmentDirections.actionDetailFragmentToListFragment()
-            view.findNavController().navigate(action)
+            button.findNavController().navigate(action)
         }
     }
 
