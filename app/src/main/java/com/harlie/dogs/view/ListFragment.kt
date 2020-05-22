@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.github.ajalt.timberkt.Timber
 
@@ -32,7 +33,9 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         buttonShowDetail.setOnClickListener {button ->
             Timber.tag(TAG).d("-CLICK- buttonShowDetail")
-            val action: NavDirections = ListFragmentDirections.actionListFragmentToDetailFragment()
+            val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+            val dogUuid = 543210 // FIXME
+            action.dogUuid = dogUuid
             button.findNavController().navigate(action)
         }
     }

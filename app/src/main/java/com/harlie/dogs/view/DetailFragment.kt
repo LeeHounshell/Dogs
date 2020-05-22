@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 class DetailFragment : Fragment() {
     private val TAG = "LEE: <" + DetailFragment::class.java.getSimpleName() + ">"
 
+    private var dogUuid = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,9 +32,14 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let { bundle ->
+            dogUuid = DetailFragmentArgs.fromBundle(bundle).dogUuid
+        }
+        Timber.tag(TAG).d("dogUuid=%d", dogUuid)
+
         buttonShowList.setOnClickListener {button ->
             Timber.tag(TAG).d("-CLICK- buttonShowList")
-            val action: NavDirections = DetailFragmentDirections.actionDetailFragmentToListFragment()
+            val action = DetailFragmentDirections.actionDetailFragmentToListFragment()
             button.findNavController().navigate(action)
         }
     }
