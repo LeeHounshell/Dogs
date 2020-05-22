@@ -50,6 +50,7 @@ def rxAndroid_version = '2.1.1'
 def glide_version = '4.11.0'
 def palette_version = '1.0.0'
 def preferences_version = '1.1.1'
+def timberkt_version = '1.5.1'
 def junit_version = '4.12'
 def junitTest_version = '1.2.0'
 def espresso_version = '3.2.0'
@@ -94,6 +95,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.preference:preference:$preferences_version"
+    implementation "com.github.ajalt:timberkt:$timberkt_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:$junitTest_version"

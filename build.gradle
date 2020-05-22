@@ -3,7 +3,8 @@
 buildscript {
     def gradle_version = '3.6.3'
 
-    // FIXME: these are duplicated in app build.gradle. global variables are broken in buildscript
+    //FIXME: these are duplicated in app build.gradle. global variables are broken in buildscript
+
     def kotlin_version = '1.3.72'
     def nav_version = '2.2.2'
 
