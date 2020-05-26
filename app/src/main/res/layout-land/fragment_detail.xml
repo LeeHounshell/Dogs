@@ -51,17 +51,17 @@
             app:layout_constraintStart_toEndOf="@+id/dogDetailImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dogDetailName"
-            app:layout_constraintBottom_toTopOf="@id/dogDetailTemperment"
+            app:layout_constraintBottom_toTopOf="@id/dogDetailTemperament"
             style="@style/Text"/>
 
         <TextView
-            android:id="@+id/dogDetailTemperment"
+            android:id="@+id/dogDetailTemperament"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            tools:text="@string/breed_temperment"
+            tools:text="@string/breed_temperament"
             app:layout_constraintStart_toEndOf="@+id/dogDetailImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dogDetailPurpose"
@@ -78,7 +78,7 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@+id/dogDetailImage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dogDetailTemperment"
+            app:layout_constraintTop_toBottomOf="@+id/dogDetailTemperament"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@string/breed_lifespan" />
 

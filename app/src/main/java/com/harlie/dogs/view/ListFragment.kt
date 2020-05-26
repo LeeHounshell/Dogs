@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_list.*
  * A simple [Fragment] subclass.
  */
 class ListFragment : Fragment() {
-    private val TAG = "LEE: <" + ListFragment::class.java.getSimpleName() + ">"
+    private val TAG = "LEE: <" + ListFragment::class.java.simpleName + ">"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

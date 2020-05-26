@@ -11,7 +11,7 @@ import com.harlie.dogs.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = "LEE: <" + MainActivity::class.java.getSimpleName() + ">"
+    private val TAG = "LEE: <" + MainActivity::class.java.simpleName + ">"
 
     private lateinit var navController: NavController
 

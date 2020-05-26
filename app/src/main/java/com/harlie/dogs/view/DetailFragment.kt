@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_detail.*
  * A simple [Fragment] subclass.
  */
 class DetailFragment : Fragment() {
-    private val TAG = "LEE: <" + DetailFragment::class.java.getSimpleName() + ">"
+    private val TAG = "LEE: <" + DetailFragment::class.java.simpleName + ">"
 
     private var dogUuid = 0
 
@@ -32,10 +32,12 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+/* FIXME
         arguments?.let { bundle ->
             dogUuid = DetailFragmentArgs.fromBundle(bundle).dogUuid
         }
         Timber.tag(TAG).d("dogUuid=%d", dogUuid)
+ */
 
 /* FIXME
         buttonShowList.setOnClickListener {button ->

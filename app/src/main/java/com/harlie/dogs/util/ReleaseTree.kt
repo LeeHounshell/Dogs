@@ -37,8 +37,8 @@ class ReleaseTree : Timber.Tree() {
     }
 
     companion object {
-        private val CRASHLYTICS_KEY_PRIORITY = "Priority"
-        private val CRASHLYTICS_KEY_TAG = "Tag"
-        private val CRASHLYTICS_KEY_MESSAGE = "Message"
+        private const val CRASHLYTICS_KEY_PRIORITY = "Priority"
+        private const val CRASHLYTICS_KEY_TAG = "Tag"
+        private const val CRASHLYTICS_KEY_MESSAGE = "Message"
     }
 }

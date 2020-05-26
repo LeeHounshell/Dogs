@@ -37,7 +37,9 @@
             app:enterAnim="@anim/fadein"
             app:exitAnim="@anim/fadeout"
             app:popUpTo="@+id/listFragment"
-            app:popUpToInclusive="true"></action>
+            app:popUpToInclusive="true">
+        </action>
+
     </fragment>
 
 </navigation>

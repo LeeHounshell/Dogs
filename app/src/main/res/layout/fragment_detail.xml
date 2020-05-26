@@ -48,12 +48,12 @@
             style="@style/Text"/>
 
         <TextView
-            android:id="@+id/dogDetailTemperment"
+            android:id="@+id/dogDetailTemperament"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_horizontal"
-            tools:text="@string/breed_temperment"
+            tools:text="@string/breed_temperament"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dogDetailPurpose"
@@ -68,7 +68,7 @@
             tools:text="@string/breed_lifespan"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dogDetailTemperment"
+            app:layout_constraintTop_toBottomOf="@+id/dogDetailTemperament"
             style="@style/Text"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

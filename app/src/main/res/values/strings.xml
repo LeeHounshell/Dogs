@@ -7,6 +7,6 @@
     <string name="dog_image">Dog Image</string>
     <string name="breed_name">Breed Name</string>
     <string name="breed_purpose">Breed Purpose</string>
-    <string name="breed_temperment">Breed Temperment</string>
+    <string name="breed_temperament">Breed Temperament</string>
     <string name="breed_lifespan">Breed Lifespan</string>
 </resources>
