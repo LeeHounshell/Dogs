@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
 
 import com.harlie.dogs.R
+import com.harlie.dogs.viewmodel.DogListViewModel
 import kotlinx.android.synthetic.main.fragment_list.*
 
 /**
@@ -18,6 +22,9 @@ import kotlinx.android.synthetic.main.fragment_list.*
  */
 class ListFragment : Fragment() {
     private val TAG = "LEE: <" + ListFragment::class.java.simpleName + ">"
+
+    private lateinit var dogListViewModel: DogListViewModel
+    private val dogListAdapter = DogListAdapter(arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +38,41 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        dogListViewModel = ViewModelProvider(this).get(DogListViewModel::class.java)
+        dogListViewModel.refresh()
+        dogsList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = dogListAdapter
+        }
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        Timber.tag(TAG).d("observeViewModel")
+        dogListViewModel.dogsLiveList.observe(viewLifecycleOwner, Observer { dogs ->
+            Timber.tag(TAG).d("observe dogsLiveList size=${dogs?.size}")
+            dogs?.let {
+                dogsList.visibility = View.VISIBLE
+                dogListAdapter.updateDogList(dogs)
+            }
+        })
+        dogListViewModel.dogsLoadError.observe(viewLifecycleOwner, Observer { isError ->
+            Timber.tag(TAG).d("observe dogsLoadError=${isError}")
+            isError?.let {
+                dogsLoadingError.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            }
+        })
+        dogListViewModel.dogsLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            Timber.tag(TAG).d("observe dogsLoading=${isLoading}")
+            isLoading?.let {
+                dogsLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
+                if (it) {
+                    dogsLoadingError.visibility = View.INVISIBLE
+                    dogsList.visibility = View.INVISIBLE
+                }
+            }
+        })
+    }
 
 /* FIXME
         buttonShowDetail.setOnClickListener {button ->
@@ -41,6 +83,5 @@ class ListFragment : Fragment() {
             button.findNavController().navigate(action)
         }
 */
-    }
 
 }

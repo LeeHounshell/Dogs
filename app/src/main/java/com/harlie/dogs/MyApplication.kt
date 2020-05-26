@@ -1,6 +1,5 @@
 package com.harlie.dogs
 
-import androidx.multidex.BuildConfig
 import androidx.multidex.MultiDexApplication
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.util.ReleaseTree
