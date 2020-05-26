@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
 
 import com.harlie.dogs.R
+import com.harlie.dogs.repository.DataRepository
 import com.harlie.dogs.viewmodel.DogListViewModel
+import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
 
 /**
@@ -38,7 +40,8 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        dogListViewModel = ViewModelProvider(this).get(DogListViewModel::class.java)
+        val viewModelFactory = MyViewModelFactory(DataRepository())
+        dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogListViewModel::class.java)
         dogListViewModel.refresh()
         dogsList.apply {
             layoutManager = LinearLayoutManager(context)
