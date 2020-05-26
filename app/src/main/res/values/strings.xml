@@ -3,4 +3,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_loading_data">error loading data</string>
+    <string name="dog_image">Dog Image</string>
+    <string name="breed_name">Breed Name</string>
+    <string name="breed_purpose">Breed Purpose</string>
+    <string name="breed_temperment">Breed Temperment</string>
+    <string name="breed_lifespan">Breed Lifespan</string>
 </resources>

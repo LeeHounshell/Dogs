@@ -31,6 +31,8 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+
+/* FIXME
         buttonShowDetail.setOnClickListener {button ->
             Timber.tag(TAG).d("-CLICK- buttonShowDetail")
             val action = ListFragmentDirections.actionListFragmentToDetailFragment()
@@ -38,6 +40,7 @@ class ListFragment : Fragment() {
             action.dogUuid = dogUuid
             button.findNavController().navigate(action)
         }
+*/
     }
 
 }

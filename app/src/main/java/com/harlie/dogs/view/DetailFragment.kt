@@ -37,11 +37,13 @@ class DetailFragment : Fragment() {
         }
         Timber.tag(TAG).d("dogUuid=%d", dogUuid)
 
+/* FIXME
         buttonShowList.setOnClickListener {button ->
             Timber.tag(TAG).d("-CLICK- buttonShowList")
             val action = DetailFragmentDirections.actionDetailFragmentToListFragment()
             button.findNavController().navigate(action)
         }
+*/
     }
 
 }
