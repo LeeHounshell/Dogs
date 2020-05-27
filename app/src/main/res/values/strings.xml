@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">Dogs</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="error_loading_data">error loading data</string>
     <string name="dog_image">Dog Image</string>
     <string name="breed_name">Breed Name</string>
     <string name="breed_purpose">Breed Purpose</string>

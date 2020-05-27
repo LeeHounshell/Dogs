@@ -1,13 +1,13 @@
-package com.harlie.dogs.repository
+package com.harlie.dogs.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.github.ajalt.timberkt.Timber
 
 open class MyViewModel: ViewModel() {
-    private val TAG = "LEE: <" + MyViewModel::class.java.simpleName + ">"
+    private val tag = "LEE: <" + MyViewModel::class.java.simpleName + ">"
 
     init {
-        Timber.tag(TAG).d("init")
+        Timber.tag(tag).d("init")
     }
 
 }

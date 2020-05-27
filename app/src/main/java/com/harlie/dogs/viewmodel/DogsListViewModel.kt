@@ -1,35 +1,62 @@
 package com.harlie.dogs.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.repository.DogsListDataRepository
-import com.harlie.dogs.repository.MyViewModel
+import kotlinx.coroutines.launch
 
-class DogsListViewModel(val repository: DogsListDataRepository): MyViewModel() {
-    private val TAG = "LEE: <" + DogsListViewModel::class.java.simpleName + ">"
+class DogsListViewModel(private val repository: DogsListDataRepository): MyViewModel() {
+    private val tag = "LEE: <" + DogsListViewModel::class.java.simpleName + ">"
 
     private val dogsRepository: DogsListDataRepository
-    val dogsLiveList = MutableLiveData<List<DogBreed>>()
-    val dogsLoadError = MutableLiveData<Boolean>()
-    val dogsLoading =  MutableLiveData<Boolean>()
+
+    private val dogsMutableList by lazy {
+        MutableLiveData<List<DogBreed>>()
+    }
+    private val dogsMutableLoading by lazy {
+        MutableLiveData<Boolean>()
+    }
 
     init {
-        Timber.tag(TAG).d("init")
+        Timber.tag(tag).d("init")
+        dogsMutableLoading.value = true
         dogsRepository = repository
     }
 
-    fun refresh() {
-        Timber.tag(TAG).d("refresh")
-        // FIXME: dummy data
-        val dog1 = DogBreed("1", "Corgi", "15 years", "group", "purpose", "temperament", "")
-        val dog2 = DogBreed("2", "Labrador", "10 years", "group", "purpose", "temperament", "")
-        val dog3 = DogBreed("3", "Siberian Husky", "20 years", "group", "purpose", "temperament", "")
-        val dogsList = arrayListOf<DogBreed>(dog1, dog2, dog3)
+    // Fragment Observers subscribe to these immutable LiveData
+    val dogsList: LiveData<List<DogBreed>>
+        get() = dogsMutableList
 
-        dogsLiveList.value = dogsList
-        dogsLoadError.value = false
-        dogsLoading.value = false
+    val dogsLoading: LiveData<Boolean>
+        get() = dogsMutableLoading
+
+    suspend fun refresh() {
+        Timber.tag(tag).d("refresh")
+        viewModelScope.launch {
+            fetchDogsFromRemote().observeForever { dogsList ->
+                Timber.tag(tag).d("observeForever dogsList.size=${dogsList.size}")
+                dogsMutableList.postValue(dogsList)
+            }
+        }
+    }
+
+    // Initiate a Network API call to get the list of DogBreed
+    private suspend fun fetchDogsFromRemote(): LiveData<List<DogBreed>> {
+        Timber.tag(tag).d("fetchDogsFromRemote")
+        return dogsRepository.fetchFromRemote()
+    }
+
+    fun loadingComplete() {
+        Timber.tag(tag).d("loadingComplete")
+        dogsMutableLoading.value = false
+    }
+
+    override fun onCleared() {
+        Timber.tag(tag).d("onCleared")
+        super.onCleared()
     }
 
 }

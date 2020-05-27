@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_detail.*
  * A simple [Fragment] subclass.
  */
 class DetailFragment : Fragment() {
-    private val TAG = "LEE: <" + DetailFragment::class.java.simpleName + ">"
+    private val _tag = "LEE: <" + DetailFragment::class.java.simpleName + ">"
 
     private lateinit var dogDetailViewModel: DogDetailViewModel
     private var dogUuid = 0
@@ -28,17 +28,17 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Timber.tag(TAG).d("onCreateView")
+        Timber.tag(_tag).d("onCreateView")
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.tag(TAG).d("onViewCreated")
+        Timber.tag(_tag).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { bundle ->
             dogUuid = DetailFragmentArgs.fromBundle(bundle).dogUuid
         }
-        Timber.tag(TAG).d("dogUuid=%d", dogUuid)
+        Timber.tag(_tag).d("dogUuid=%d", dogUuid)
         val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid))
         dogDetailViewModel = ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
         dogDetailViewModel.fetch()
@@ -46,18 +46,18 @@ class DetailFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        Timber.tag(TAG).d("observeViewModel")
+        Timber.tag(_tag).d("observeViewModel")
         dogDetailViewModel.dogLiveDetail.observe(viewLifecycleOwner, Observer { dog ->
-            Timber.tag(TAG).d("observe dogLiveDetail dog=${dog}")
+            Timber.tag(_tag).d("observe dogLiveDetail dog=${dog}")
             dog?.let {
                 //FIXME: set dogDetailImage
                 dogDetailName.text = dog.breedName
                 dogDetailPurpose.text = dog.breedPurpose
-                dogDetailTemperament.text = dog.breedTemerament
+                dogDetailTemperament.text = dog.breedTemperament
                 dogDetailLifespan.text = dog.breedLifespan
 /* FIXME
                 buttonShowList.setOnClickListener {button ->
-                    Timber.tag(TAG).d("-CLICK- buttonShowList")
+                    Timber.tag(tag).d("-CLICK- buttonShowList")
                     val action = DetailFragmentDirections.actionDetailFragmentToListFragment()
                     button.findNavController().navigate(action)
                 }

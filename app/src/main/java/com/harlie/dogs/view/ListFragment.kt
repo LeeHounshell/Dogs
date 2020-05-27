@@ -15,64 +15,78 @@ import com.harlie.dogs.repository.DogsListDataRepository
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
 class ListFragment : Fragment() {
-    private val TAG = "LEE: <" + ListFragment::class.java.simpleName + ">"
+    private val _tag = "LEE: <" + ListFragment::class.java.simpleName + ">"
 
     private lateinit var dogListViewModel: DogsListViewModel
     private val dogListAdapter = DogsListAdapter(arrayListOf())
+
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Timber.tag(TAG).d("onCreateView")
+        Timber.tag(_tag).d("onCreateView")
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Timber.tag(TAG).d("onViewCreated")
+        Timber.tag(_tag).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         val repositoryURL: String = DogsApiService.BASE_URL
         val viewModelFactory = MyViewModelFactory(DogsListDataRepository(repositoryURL))
         dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogsListViewModel::class.java)
-        dogListViewModel.refresh()
         dogsList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = dogListAdapter
         }
         observeViewModel()
+        refresh()
     }
 
     private fun observeViewModel() {
-        Timber.tag(TAG).d("observeViewModel")
-        dogListViewModel.dogsLiveList.observe(viewLifecycleOwner, Observer { dogs ->
-            Timber.tag(TAG).d("observe dogsLiveList size=${dogs?.size}")
+        Timber.tag(_tag).d("observeViewModel")
+        dogListViewModel.dogsList.observe(viewLifecycleOwner, Observer { dogs ->
+            Timber.tag(_tag).d("observe dogsLiveList size=${dogs?.size}")
             dogs?.let {
                 dogsList.visibility = View.VISIBLE
                 dogListAdapter.updateDogList(dogs)
-            }
-        })
-        dogListViewModel.dogsLoadError.observe(viewLifecycleOwner, Observer { isError ->
-            Timber.tag(TAG).d("observe dogsLoadError=${isError}")
-            isError?.let {
-                dogsLoadingError.visibility = if (it) View.VISIBLE else View.INVISIBLE
+                dogListViewModel.loadingComplete()
             }
         })
         dogListViewModel.dogsLoading.observe(viewLifecycleOwner, Observer { isLoading ->
-            Timber.tag(TAG).d("observe dogsLoading=${isLoading}")
+            Timber.tag(_tag).d("observe dogsLoading=${isLoading}")
             isLoading?.let {
                 dogsLoadingProgress.visibility = if (it) View.VISIBLE else View.INVISIBLE
                 if (it) {
-                    dogsLoadingError.visibility = View.INVISIBLE
                     dogsList.visibility = View.INVISIBLE
                 }
             }
         })
+    }
+
+    private fun refresh() {
+        Timber.tag(_tag).d("refresh")
+        uiScope.launch(Dispatchers.IO) {
+            dogListViewModel.refresh()
+        }
+    }
+
+    override fun onDestroy(){
+        Timber.tag(_tag).d("onDestroy")
+        job.cancel()
+        super.onDestroy()
     }
 
 }

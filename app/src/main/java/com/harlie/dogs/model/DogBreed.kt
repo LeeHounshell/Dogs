@@ -19,7 +19,7 @@ data class DogBreed(
     val breedPurpose: String?,
 
     @SerializedName("temperament")
-    val breedTemerament: String?,
+    val breedTemperament: String?,
 
     @SerializedName("url")
     val breedImageUrl: String?
