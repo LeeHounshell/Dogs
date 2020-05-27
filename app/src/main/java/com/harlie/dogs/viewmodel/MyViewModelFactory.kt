@@ -10,7 +10,6 @@ import com.harlie.dogs.repository.DogsListDataRepository
 // This ViewModelFactory allows creation of ViewModels with parameters passed as arguments
 // The advantage here is dependency inversion so that ViewModels do not create their repositories
 class MyViewModelFactory constructor(private val repository: DataRepository): ViewModelProvider.Factory {
-
     private val TAG = "LEE: <" + MyViewModelFactory::class.java.simpleName + ">"
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

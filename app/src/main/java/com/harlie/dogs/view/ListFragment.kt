@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
+import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.repository.DogsListDataRepository
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
@@ -36,7 +37,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        val repositoryURL: String = "http://FIXME" //FIXME
+        val repositoryURL: String = DogsApiService.BASE_URL
         val viewModelFactory = MyViewModelFactory(DogsListDataRepository(repositoryURL))
         dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogsListViewModel::class.java)
         dogListViewModel.refresh()
