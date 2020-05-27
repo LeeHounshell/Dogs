@@ -1,21 +1,17 @@
 package com.harlie.dogs.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
-
 import com.harlie.dogs.R
-import com.harlie.dogs.repository.DataRepository
-import com.harlie.dogs.viewmodel.DogListViewModel
+import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
 
@@ -25,8 +21,8 @@ import kotlinx.android.synthetic.main.fragment_list.*
 class ListFragment : Fragment() {
     private val TAG = "LEE: <" + ListFragment::class.java.simpleName + ">"
 
-    private lateinit var dogListViewModel: DogListViewModel
-    private val dogListAdapter = DogListAdapter(arrayListOf())
+    private lateinit var dogListViewModel: DogsListViewModel
+    private val dogListAdapter = DogsListAdapter(arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,8 +36,9 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Timber.tag(TAG).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        val viewModelFactory = MyViewModelFactory(DataRepository())
-        dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogListViewModel::class.java)
+        val repositoryURL: String = "http://FIXME" //FIXME
+        val viewModelFactory = MyViewModelFactory(DogsListDataRepository(repositoryURL))
+        dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogsListViewModel::class.java)
         dogListViewModel.refresh()
         dogsList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -76,15 +73,5 @@ class ListFragment : Fragment() {
             }
         })
     }
-
-/* FIXME
-        buttonShowDetail.setOnClickListener {button ->
-            Timber.tag(TAG).d("-CLICK- buttonShowDetail")
-            val action = ListFragmentDirections.actionListFragmentToDetailFragment()
-            val dogUuid = 543210 // FIXME
-            action.dogUuid = dogUuid
-            button.findNavController().navigate(action)
-        }
-*/
 
 }

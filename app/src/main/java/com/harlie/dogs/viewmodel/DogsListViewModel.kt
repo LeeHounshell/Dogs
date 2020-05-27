@@ -1,15 +1,15 @@
 package com.harlie.dogs.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.model.DogBreed
-import com.harlie.dogs.repository.DataRepository
+import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.repository.MyViewModel
 
-class DogListViewModel(val repository: DataRepository): ViewModel() {
-    private val TAG = "LEE: <" + DogListViewModel::class.java.simpleName + ">"
+class DogsListViewModel(val repository: DogsListDataRepository): MyViewModel() {
+    private val TAG = "LEE: <" + DogsListViewModel::class.java.simpleName + ">"
 
-    private val dogsRepository: DataRepository
+    private val dogsRepository: DogsListDataRepository
     val dogsLiveList = MutableLiveData<List<DogBreed>>()
     val dogsLoadError = MutableLiveData<Boolean>()
     val dogsLoading =  MutableLiveData<Boolean>()
@@ -31,4 +31,5 @@ class DogListViewModel(val repository: DataRepository): ViewModel() {
         dogsLoadError.value = false
         dogsLoading.value = false
     }
+
 }

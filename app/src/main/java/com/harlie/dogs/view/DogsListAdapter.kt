@@ -3,14 +3,15 @@ package com.harlie.dogs.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.model.DogBreed
 import kotlinx.android.synthetic.main.item_dogs.view.*
 
-class DogListAdapter(val dogsList: ArrayList<DogBreed>): RecyclerView.Adapter<DogListAdapter.DogViewHolder>() {
-    private val TAG = "LEE: <" + DogListAdapter::class.java.simpleName + ">"
+class DogsListAdapter(val dogsList: ArrayList<DogBreed>): RecyclerView.Adapter<DogsListAdapter.DogViewHolder>() {
+    private val TAG = "LEE: <" + DogsListAdapter::class.java.simpleName + ">"
 
     fun updateDogList(newDogList: List<DogBreed>) {
         Timber.tag(TAG).d("updateDogList")
@@ -32,6 +33,12 @@ class DogListAdapter(val dogsList: ArrayList<DogBreed>): RecyclerView.Adapter<Do
         Timber.tag(TAG).d("onBindViewHolder")
         holder.view.dogName.text = dogsList[position].breedName
         holder.view.dogLifespan.text = dogsList[position].breedLifespan
+        holder.view.setOnClickListener {view ->
+            Timber.tag(TAG).d("-CLICK- $holder")
+            val action = ListFragmentDirections.actionListFragmentToDetailFragment()
+            action.dogUuid = dogsList[position].breedId!!.toInt()
+            view.findNavController().navigate(action)
+        }
     }
 
     class DogViewHolder(var view: View): RecyclerView.ViewHolder(view)
