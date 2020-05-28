@@ -56,7 +56,17 @@ class ListFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = dogListAdapter
         }
+
         observeViewModel()
+
+        refreshLayout.setOnRefreshListener {
+            Timber.tag(_tag).d("swipe to refresh")
+            dogsList.visibility = View.INVISIBLE
+            dogsLoadingProgress.visibility = View.VISIBLE
+            refreshLayout.isRefreshing = false
+            refresh()
+        }
+
         refresh()
     }
 
