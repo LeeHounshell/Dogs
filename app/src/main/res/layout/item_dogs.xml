@@ -8,11 +8,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.harlie.dogs.view.CenterBottomImageView
             android:id="@+id/dogListImage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@mipmap/ic_dog_icon"
             tools:src="@mipmap/ic_dog_icon"
             android:contentDescription="@string/dog_image"
             android:padding="4dp"

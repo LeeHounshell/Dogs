@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.model.DogBreed
+import com.harlie.dogs.util.getProgressDrawable
+import com.harlie.dogs.util.loadImage
 import kotlinx.android.synthetic.main.item_dogs.view.*
 
 class DogsListAdapter(private val dogsList: ArrayList<DogBreed>): RecyclerView.Adapter<DogsListAdapter.DogViewHolder>() {
@@ -39,6 +41,7 @@ class DogsListAdapter(private val dogsList: ArrayList<DogBreed>): RecyclerView.A
             action.dogUuid = dogsList[position].breedId!!.toInt()
             view.findNavController().navigate(action)
         }
+        holder.view.dogListImage.loadImage(dogsList[position].breedImageUrl, getProgressDrawable(holder.view.dogListImage.context))
     }
 
     class DogViewHolder(var view: View): RecyclerView.ViewHolder(view)
