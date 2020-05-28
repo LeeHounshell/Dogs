@@ -1,10 +1,10 @@
 package com.harlie.dogs.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApiService
+import com.harlie.dogs.util.MyLiveDataReactiveStreams
 import io.reactivex.schedulers.Schedulers
 
 class DogsListDataRepository(repositoryURL: String): DataRepository() {
@@ -19,7 +19,7 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
 
     fun fetchFromRemote(): LiveData<List<DogBreed>> {
         Timber.tag(_tag).d("fetchFromRemote")
-        return LiveDataReactiveStreams.fromPublisher(
+        return MyLiveDataReactiveStreams.fromPublisher(
             dogsApiService.getRequestApi()
                 .getFlowableDogs()
                 .subscribeOn(Schedulers.io())

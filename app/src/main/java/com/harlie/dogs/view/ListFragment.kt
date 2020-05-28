@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.util.RxErrorEvent
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -19,6 +21,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * A simple [Fragment] subclass.
@@ -87,6 +92,25 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("onDestroy")
         job.cancel()
         super.onDestroy()
+    }
+
+    override fun onStart() {
+        Timber.tag(_tag).d("onStart")
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        Timber.tag(_tag).d("onStop")
+        super.onStop()
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRxErrorEvent(rxError_event: RxErrorEvent) {
+        Timber.tag(_tag).d("onRxErrorEvent")
+        dogListViewModel.loadingComplete()
+        Toast.makeText(activity, rxError_event.errorDescription, Toast.LENGTH_LONG).show()
     }
 
 }
