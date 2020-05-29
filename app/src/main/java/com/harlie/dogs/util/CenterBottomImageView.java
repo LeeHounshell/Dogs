@@ -1,7 +1,7 @@
 package com.harlie.dogs.util;
 
 /*
- * This code was taken from https://stackoverflow.com/users/1120154/adrian-le-roy-devezin
+ * CenterBottomImageView was created by https://stackoverflow.com/users/1120154/adrian-le-roy-devezin
  */
 
 import android.content.Context;
@@ -42,7 +42,7 @@ public class CenterBottomImageView extends androidx.appcompat.widget.AppCompatIm
 
         float usedScaleFactor = 1;
 
-        if((frameWidth > originalImageWidth) || (frameHeight > originalImageHeight)) {
+        if ((frameWidth > originalImageWidth) || (frameHeight > originalImageHeight)) {
             // If frame is bigger than image
             // => Crop it, keep aspect ratio and position it at the bottom and center horizontally
 
@@ -56,7 +56,7 @@ public class CenterBottomImageView extends androidx.appcompat.widget.AppCompatIm
         float newImageHeight = originalImageHeight * usedScaleFactor;
 
         Matrix matrix = getImageMatrix();
-        matrix.setScale(usedScaleFactor, usedScaleFactor, 0, 0); // Replaces the old matrix completly
+        matrix.setScale(usedScaleFactor, usedScaleFactor, 0, 0); // Replaces the old matrix completely
 
         //comment matrix.postTranslate if you want crop from TOP
         matrix.postTranslate((frameWidth - newImageWidth) /2, frameHeight - newImageHeight);

@@ -113,7 +113,7 @@ class ListFragment : Fragment() {
     override fun onStop() {
         Timber.tag(_tag).d("onStop")
         super.onStop()
-        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

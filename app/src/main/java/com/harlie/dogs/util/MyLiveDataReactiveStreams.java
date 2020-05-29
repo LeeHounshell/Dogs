@@ -130,7 +130,7 @@ public final class MyLiveDataReactiveStreams {
                             return;
                         }
 
-                        // Prevent overflowage.
+                        // Prevent overflow.
                         mRequested = mRequested + n >= mRequested
                                 ? mRequested + n : Long.MAX_VALUE;
                         if (!mObserving) {
@@ -220,11 +220,13 @@ public final class MyLiveDataReactiveStreams {
             mSubscriber = new AtomicReference<>();
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         protected void onActive() {
             super.onActive();
             MyLiveDataReactiveStreams.PublisherLiveData.LiveDataSubscriber s = new MyLiveDataReactiveStreams.PublisherLiveData.LiveDataSubscriber();
             mSubscriber.set(s);
+            //noinspection unchecked
             mPublisher.subscribe(s);
         }
 

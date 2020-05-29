@@ -3,14 +3,10 @@ package com.harlie.dogs.util
 import com.github.ajalt.timberkt.Timber
 import org.greenrobot.eventbus.EventBus
 
-class RxErrorEvent(val description: String) {
+class RxErrorEvent(private val description: String) {
     private val _tag = "LEE: <" + RxErrorEvent::class.java.simpleName + ">"
 
-    lateinit var errorDescription: String
-
-    init {
-        errorDescription = description
-    }
+    var errorDescription: String = description
 
     fun post() {
         Timber.tag(_tag).d("post $errorDescription")
