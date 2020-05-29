@@ -12,6 +12,7 @@ class DogsListViewModel(private val repository: DogsListDataRepository): MyViewM
     private val tag = "LEE: <" + DogsListViewModel::class.java.simpleName + ">"
 
     private val dogsRepository: DogsListDataRepository
+    private val refreshTime = 5 * 60 * 1000 * 1000 * 1000L // 5 minutes in nanoseconds
 
     private val dogsMutableList by lazy {
         MutableLiveData<List<DogBreed>>()
@@ -22,7 +23,7 @@ class DogsListViewModel(private val repository: DogsListDataRepository): MyViewM
 
     init {
         Timber.tag(tag).d("init")
-        dogsMutableLoading.value = true
+        dogsMutableLoading.value = false
         dogsRepository = repository
     }
 
@@ -35,12 +36,34 @@ class DogsListViewModel(private val repository: DogsListDataRepository): MyViewM
 
     suspend fun refresh() {
         Timber.tag(tag).d("refresh")
-        viewModelScope.launch {
-            fetchDogsFromRemote().observeForever { dogsList ->
-                Timber.tag(tag).d("observeForever dogsList.size=${dogsList.size}")
-                dogsMutableList.postValue(dogsList)
+        dogsMutableLoading.postValue(true)
+        val updateTime = dogsRepository.prefHelper.getUpdateTime()
+        Timber.tag(tag).d("refresh updateTime=${updateTime}")
+        if ((updateTime != null) && (updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime)) {
+            Timber.tag(tag).d("refresh: fetch data from database")
+            viewModelScope.launch {
+                fetchDogsFromDatabase().observeForever { dogsList ->
+                    Timber.tag(tag).d("db observeForever dogsList.size=${dogsList.size}")
+                    dogsMutableList.postValue(dogsList)
+                }
             }
         }
+        else {
+            Timber.tag(tag).d("refresh: fetch data from network")
+            viewModelScope.launch {
+                fetchDogsFromRemote().observeForever { dogsList ->
+                    Timber.tag(tag).d("net observeForever dogsList.size=${dogsList.size}")
+                    dogsMutableList.postValue(dogsList)
+                    dogsRepository.storeDogsLocally(dogsList)
+                }
+            }
+        }
+    }
+
+    // Initiate a Database API call to get the list of DogBreed
+    private suspend fun fetchDogsFromDatabase(): LiveData<List<DogBreed>> {
+        Timber.tag(tag).d("fetchDogsFromDatabase")
+        return dogsRepository.fetchFromDatabase()
     }
 
     // Initiate a Network API call to get the list of DogBreed
@@ -57,6 +80,7 @@ class DogsListViewModel(private val repository: DogsListDataRepository): MyViewM
     override fun onCleared() {
         Timber.tag(tag).d("onCleared")
         super.onCleared()
+        dogsRepository.onCleared()
     }
 
 }
