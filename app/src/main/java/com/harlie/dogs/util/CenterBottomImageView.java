@@ -1,4 +1,8 @@
-package com.harlie.dogs.view;
+package com.harlie.dogs.util;
+
+/*
+ * This code was taken from https://stackoverflow.com/users/1120154/adrian-le-roy-devezin
+ */
 
 import android.content.Context;
 import android.graphics.Matrix;
@@ -16,8 +20,7 @@ public class CenterBottomImageView extends androidx.appcompat.widget.AppCompatIm
         setup();
     }
 
-    public CenterBottomImageView(Context context, AttributeSet attrs,
-                                 int defStyle) {
+    public CenterBottomImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         setup();
     }

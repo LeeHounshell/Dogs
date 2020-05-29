@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.harlie.dogs.view.CenterBottomImageView
+        <com.harlie.dogs.util.CenterBottomImageView
             android:id="@+id/dogListImage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
