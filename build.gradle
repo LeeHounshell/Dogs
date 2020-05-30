@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    def gradle_version = '3.6.3'
+    def gradle_version = '4.0.0'
 
     //FIXME: these are duplicated in app build.gradle. global variables are broken in buildscript
 

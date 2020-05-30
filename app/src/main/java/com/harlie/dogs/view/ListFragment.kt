@@ -1,5 +1,6 @@
 package com.harlie.dogs.view
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -96,6 +97,14 @@ class ListFragment : Fragment() {
         uiScope.launch(Dispatchers.IO) {
             dogListViewModel.refresh()
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        Timber.tag(_tag).d("onConfigurationChanged")
+        super.onConfigurationChanged(newConfig)
+        // this forces the RecyclerView to redraw images (to fix an Android rotation bug)
+        val myAdapter = dogsList.adapter
+        dogsList.adapter = myAdapter
     }
 
     override fun onDestroy(){

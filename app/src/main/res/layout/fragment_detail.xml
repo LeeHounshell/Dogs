@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         tools:context=".view.DetailFragment">
 
-        <ImageView
+        <com.harlie.dogs.util.CenterBottomImageView
             android:id="@+id/dogDetailImage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
