@@ -3,15 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="dog"
+            type="com.harlie.dogs.model.DogBreed">
+        </variable>
+        <variable
+            name="listener"
+            type="com.harlie.dogs.view.DogClickListener">
+        </variable>
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{listener::onDogClicked}"
         android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/dogId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(dog.uuid)}"
+            android:visibility="gone" />
 
         <com.harlie.dogs.util.CenterBottomImageView
             android:id="@+id/dogListImage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:imageUrl="@{dog.breedImageUrl}"
             tools:src="@mipmap/ic_dog_icon"
             android:contentDescription="@string/dog_image"
             android:padding="4dp"
@@ -29,6 +49,7 @@
                 android:id="@+id/dogName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{dog.breedName}"
                 tools:text="@string/breed_name"
                 style="@style/Title"/>
 
@@ -36,6 +57,7 @@
                 android:id="@+id/dogLifespan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{dog.breedLifespan}"
                 tools:text="@string/breed_lifespan"
                 style="@style/Text"/>
 

@@ -4,6 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="dog"
+            type="com.harlie.dogs.model.DogBreed">
+        </variable>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:imageUrl="@{dog.breedImageUrl}"
             tools:src="@mipmap/ic_dog_icon" />
 
         <TextView
@@ -29,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_horizontal"
+            android:text="@{dog.breedName}"
             tools:text="@string/breed_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_horizontal"
+            android:text="@{dog.breedPurpose}"
             tools:text="@string/breed_purpose"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_horizontal"
+            android:text="@{dog.breedTemperament}"
             tools:text="@string/breed_temperament"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_horizontal"
+            android:text="@{dog.breedLifespan}"
             tools:text="@string/breed_lifespan"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

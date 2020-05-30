@@ -4,6 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="dog"
+            type="com.harlie.dogs.model.DogBreed">
+        </variable>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,6 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent"
+            android:imageUrl="@{dog.breedImageUrl}"
             tools:src="@mipmap/ic_dog_icon" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -69,6 +77,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:gravity="start"
+                android:text="@{dog.breedName}"
                 tools:text="@string/breed_name" />
 
             <TextView
@@ -84,6 +93,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="2"
                 android:gravity="start"
+                android:text="@{dog.breedPurpose}"
                 tools:text="@string/breed_purpose" />
 
             <TextView
@@ -99,6 +109,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="2"
                 android:gravity="start"
+                android:text="@{dog.breedTemperament}"
                 tools:text="@string/breed_temperament" />
 
             <TextView
@@ -114,6 +125,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_weight="2"
                 android:gravity="start"
+                android:text="@{dog.breedLifespan}"
                 tools:text="@string/breed_lifespan" />
 
         </LinearLayout>

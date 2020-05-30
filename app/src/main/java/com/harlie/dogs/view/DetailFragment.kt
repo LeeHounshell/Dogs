@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
+import com.harlie.dogs.databinding.FragmentDetailBinding
 import com.harlie.dogs.repository.DogDetailDataRepository
 import com.harlie.dogs.util.getProgressDrawable
 import com.harlie.dogs.util.loadImage
@@ -28,6 +30,7 @@ class DetailFragment : Fragment() {
     private val _tag = "LEE: <" + DetailFragment::class.java.simpleName + ">"
 
     private lateinit var dogDetailViewModel: DogDetailViewModel
+    private lateinit var dataBinding: FragmentDetailBinding
     private var dogUuid = 0
 
     private val job = Job()
@@ -39,7 +42,8 @@ class DetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         Timber.tag(_tag).d("onCreateView")
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,13 +64,7 @@ class DetailFragment : Fragment() {
         Timber.tag(_tag).d("observeViewModel")
         dogDetailViewModel.dog.observe(viewLifecycleOwner, Observer { dog ->
             Timber.tag(_tag).d("observe dog dog=${dog}")
-            dogDetailName.text = dog.breedName
-            dogDetailPurpose.text = dog.breedPurpose
-            dogDetailTemperament.text = dog.breedTemperament
-            dogDetailLifespan.text = dog.breedLifespan
-            context?.let {context ->
-                dogDetailImage.loadImage(dog.breedImageUrl, getProgressDrawable(context))
-            }
+            dataBinding.dog = dog
         })
     }
 
