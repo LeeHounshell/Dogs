@@ -13,11 +13,8 @@ import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.databinding.FragmentDetailBinding
 import com.harlie.dogs.repository.DogDetailDataRepository
-import com.harlie.dogs.util.getProgressDrawable
-import com.harlie.dogs.util.loadImage
 import com.harlie.dogs.viewmodel.DogDetailViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
-import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

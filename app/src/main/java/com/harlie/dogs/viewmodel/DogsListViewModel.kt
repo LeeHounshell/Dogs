@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.ajalt.timberkt.Timber
+import com.harlie.dogs.MyApplication
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.util.isNetworkAvailable
 import kotlinx.coroutines.launch
+
 
 class DogsListViewModel(private val repository: DogsListDataRepository): MyViewModel() {
     private val tag = "LEE: <" + DogsListViewModel::class.java.simpleName + ">"
@@ -39,7 +42,7 @@ class DogsListViewModel(private val repository: DogsListDataRepository): MyViewM
         dogsMutableLoading.postValue(true)
         val updateTime = dogsRepository.prefHelper.getUpdateTime()
         Timber.tag(tag).d("refresh updateTime=${updateTime}")
-        if ((updateTime != null) && (updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime)) {
+        if (! isNetworkAvailable(MyApplication.applicationContext()) || ((updateTime != null) && (updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime))) {
             Timber.tag(tag).d("refresh: fetch data from database")
             viewModelScope.launch {
                 fetchDogsFromDatabase().observeForever { dogsList ->
