@@ -9,12 +9,17 @@
             name="dog"
             type="com.harlie.dogs.model.DogBreed">
         </variable>
+        <variable
+            name="palette"
+            type="com.harlie.dogs.model.DogPalette">
+        </variable>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@{palette.color}"
         tools:context=".view.DetailFragment">
 
         <com.harlie.dogs.util.CenterBottomImageView
