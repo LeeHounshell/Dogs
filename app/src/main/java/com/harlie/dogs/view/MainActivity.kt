@@ -19,6 +19,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(_tag).d("onCreate")
+        val gotoFragment = intent.getStringExtra("gotoFragment")
+        if (gotoFragment != null) {
+            Timber.tag(_tag).d("onCreate: gotoFragment=${gotoFragment}")
+
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)

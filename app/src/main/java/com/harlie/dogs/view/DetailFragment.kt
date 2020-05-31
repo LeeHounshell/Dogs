@@ -36,6 +36,7 @@ class DetailFragment : Fragment() {
     private lateinit var dogDetailViewModel: DogDetailViewModel
     private lateinit var dataBinding: FragmentDetailBinding
     private var dogUuid = 0
+    private var deepLink = false
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -55,10 +56,13 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { bundle ->
             dogUuid = DetailFragmentArgs.fromBundle(bundle).dogUuid
+            deepLink = bundle.getBoolean("deep_link", false)
         }
-        Timber.tag(_tag).d("dogUuid=%d", dogUuid)
+        Timber.tag(_tag).d("dogUuid=${dogUuid}")
+        Timber.tag(_tag).d("deepLink=${deepLink}")
         val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid))
         dogDetailViewModel = ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
+        dogDetailViewModel.isDeepLink = deepLink
 
         observeViewModel()
         refresh()
@@ -67,7 +71,7 @@ class DetailFragment : Fragment() {
     private fun observeViewModel() {
         Timber.tag(_tag).d("observeViewModel")
         dogDetailViewModel.dog.observe(viewLifecycleOwner, Observer { dog ->
-            Timber.tag(_tag).d("observe dog dog=${dog}")
+            Timber.tag(_tag).d("observe dog_icon dog_icon=${dog}")
             dataBinding.dog = dog
             dog?.breedImageUrl?.let {
                 setBackgroundColor(it)
@@ -85,7 +89,7 @@ class DetailFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         Timber.tag(_tag).d("onConfigurationChanged")
         super.onConfigurationChanged(newConfig)
-        // FIXME: force redraw of the dog image (to fix an Android rotation bug)
+        // FIXME: force redraw of the dog_icon image (to fix an Android rotation bug)
     }
 
     private fun setBackgroundColor(url: String) {
