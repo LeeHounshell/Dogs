@@ -10,10 +10,10 @@ import com.harlie.dogs.repository.DogsListDataRepository
 // This ViewModelFactory allows creation of ViewModels with parameters passed as arguments
 // The advantage here is dependency inversion so that ViewModels do not create their repositories
 class MyViewModelFactory constructor(private val repository: DataRepository): ViewModelProvider.Factory {
-    private val tag = "LEE: <" + MyViewModelFactory::class.java.simpleName + ">"
+    private val _tag = "LEE: <" + MyViewModelFactory::class.java.simpleName + ">"
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        Timber.tag(tag).d("create $modelClass")
+        Timber.tag(_tag).d("create $modelClass")
         try {
             return when (repository) {
                 is DogsListDataRepository ->

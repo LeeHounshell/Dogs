@@ -2,13 +2,12 @@ package com.harlie.dogs.view
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
@@ -26,9 +25,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-/**
- * A simple [Fragment] subclass.
- */
 class ListFragment : Fragment() {
     private val _tag = "LEE: <" + ListFragment::class.java.simpleName + ">"
 
@@ -44,6 +40,7 @@ class ListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         Timber.tag(_tag).d("onCreateView")
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
@@ -97,6 +94,26 @@ class ListFragment : Fragment() {
         uiScope.launch(Dispatchers.IO) {
             dogListViewModel.refresh()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.tag(_tag).d("onCreateOptionsMenu")
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.list_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.tag(_tag).d("onOptionsItemSelected")
+        when (item.itemId) {
+            R.id.actionSettings -> {
+                view?.let {
+                    Timber.tag(_tag).d("onOptionsItemSelected: navigate to SettingsFragment")
+                    val action = ListFragmentDirections.actionListFragmentToSettingsFragment()
+                    it.findNavController().navigate(action)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

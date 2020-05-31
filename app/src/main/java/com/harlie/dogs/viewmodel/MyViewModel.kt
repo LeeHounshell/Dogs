@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.github.ajalt.timberkt.Timber
 
 open class MyViewModel: ViewModel() {
-    private val tag = "LEE: <" + MyViewModel::class.java.simpleName + ">"
+    private val _tag = "LEE: <" + MyViewModel::class.java.simpleName + ">"
 
     init {
-        Timber.tag(tag).d("init")
+        Timber.tag(_tag).d("init")
     }
 
 }

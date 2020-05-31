@@ -5,4 +5,5 @@
     <string name="breed_purpose">Breed Purpose</string>
     <string name="breed_temperament">Breed Temperament</string>
     <string name="breed_lifespan">Breed Lifespan</string>
+    <string name="settingsTitle">Settings</string>
 </resources>

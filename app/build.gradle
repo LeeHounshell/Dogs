@@ -48,6 +48,7 @@ android {
 
 }
 
+
 def kotlin_version = '1.3.72'
 def multidex_version = '2.0.1'
 def appCompat_version = '1.1.0'
@@ -68,6 +69,7 @@ def palette_version = '1.0.0'
 def preferences_version = '1.1.1'
 def timberkt_version = '1.5.1'
 def greenrobot_version = '3.2.0'
+def antlr_version = '4.7.1'
 def junit_version = '4.12'
 def junitTest_version = '1.2.0'
 def espresso_version = '3.2.0'
@@ -126,3 +128,18 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$junitTest_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }
+
+//groovy
+configurations.all {
+    resolutionStrategy.force "org.antlr:antlr4-runtime:$antlr_version"
+    resolutionStrategy.force "org.antlr:antlr4-tool:$antlr_version"
+}
+
+//kotlin DSL
+configurations.all {
+    resolutionStrategy {
+        force("org.antlr:antlr4-runtime:$antlr_version")
+        force("org.antlr:antlr4-tool:$antlr_version")
+    }
+}
+

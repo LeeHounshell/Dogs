@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Adapts {@link LiveData} input and output to the ReactiveStreams spec.
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("ALL")
 public final class MyLiveDataReactiveStreams {
     private final static String _tag = "LEE: <" + MyLiveDataReactiveStreams.class.getSimpleName() + ">";
 
@@ -56,6 +56,7 @@ public final class MyLiveDataReactiveStreams {
         return new MyLiveDataReactiveStreams.LiveDataPublisher<>(lifecycle, liveData);
     }
 
+    @SuppressWarnings("Convert2Diamond")
     private static final class LiveDataPublisher<T> implements Publisher<T> {
         final LifecycleOwner mLifecycle;
         final LiveData<T> mLiveData;
@@ -70,6 +71,7 @@ public final class MyLiveDataReactiveStreams {
             subscriber.onSubscribe(new MyLiveDataReactiveStreams.LiveDataPublisher.LiveDataSubscription<T>(subscriber, mLifecycle, mLiveData));
         }
 
+        @SuppressWarnings("Convert2Lambda")
         static final class LiveDataSubscription<T> implements Subscription, Observer<T> {
             final Subscriber<? super T> mSubscriber;
             final LifecycleOwner mLifecycle;
@@ -211,6 +213,7 @@ public final class MyLiveDataReactiveStreams {
      *
      * @param <T> The type of data hold by this instance.
      */
+    @SuppressWarnings("rawtypes")
     private static class PublisherLiveData<T> extends LiveData<T> {
         private final Publisher<T> mPublisher;
         final AtomicReference<MyLiveDataReactiveStreams.PublisherLiveData.LiveDataSubscriber> mSubscriber;
@@ -239,6 +242,7 @@ public final class MyLiveDataReactiveStreams {
             }
         }
 
+        @SuppressWarnings("Convert2Lambda")
         final class LiveDataSubscriber extends AtomicReference<Subscription>
                 implements Subscriber<T> {
 

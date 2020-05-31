@@ -17,8 +17,8 @@ import com.harlie.dogs.util.NotificationsHelper
 import kotlinx.coroutines.launch
 
 
-class DogDetailViewModel(private val repository: DogDetailDataRepository): MyViewModel() {
-    private val tag = "LEE: <" + DogDetailViewModel::class.java.simpleName + ">"
+class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
+    private val _tag = "LEE: <" + DogDetailViewModel::class.java.simpleName + ">"
 
     private val dogRepository: DogDetailDataRepository
     var isDeepLink: Boolean = false
@@ -28,7 +28,7 @@ class DogDetailViewModel(private val repository: DogDetailDataRepository): MyVie
     }
 
     init {
-        Timber.tag(tag).d("init")
+        Timber.tag(_tag).d("init")
         dogRepository = repository
     }
 
@@ -37,10 +37,10 @@ class DogDetailViewModel(private val repository: DogDetailDataRepository): MyVie
         get() = dogMutableDetail
 
     suspend fun fetch() {
-        Timber.tag(tag).d("fetch")
+        Timber.tag(_tag).d("fetch")
         viewModelScope.launch {
             fetchDogFromDatabase().observeForever { dog ->
-                Timber.tag(tag).d("db observeForever dog_icon=${dog}")
+                Timber.tag(_tag).d("db observeForever dog_icon=${dog}")
                 dogMutableDetail.postValue(dog)
                 if (! isDeepLink) {
                     // create and run a Notification
@@ -70,7 +70,7 @@ class DogDetailViewModel(private val repository: DogDetailDataRepository): MyVie
 
     // Initiate a Database API call to get the DogBreed
     private suspend fun fetchDogFromDatabase(): LiveData<DogBreed> {
-        Timber.tag(tag).d("fetchDogFromDatabase")
+        Timber.tag(_tag).d("fetchDogFromDatabase")
         return dogRepository.fetchFromDatabase()
     }
 

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.harlie.dogs.model.DogBreed
 
-@Database(entities = arrayOf(DogBreed::class), version = 1)
+@Database(entities = [DogBreed::class], version = 1)
 abstract class DogDatabase: RoomDatabase() {
     abstract fun dogDao(): DogDao
 

@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorText">@android:color/white</color>
     <color name="colorSubText">#DDDDDD</color>
+    <color name="transparent">#00000000</color>
 </resources>

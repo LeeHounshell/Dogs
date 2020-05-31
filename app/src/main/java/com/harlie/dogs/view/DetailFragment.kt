@@ -27,9 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass.
- */
 class DetailFragment : Fragment() {
     private val _tag = "LEE: <" + DetailFragment::class.java.simpleName + ">"
 

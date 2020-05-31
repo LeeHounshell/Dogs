@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dog_navigation"
     app:startDestination="@id/listFragment"
     tools:ignore="UnusedNavigation">
 
@@ -23,6 +22,9 @@
                 android:defaultValue="0"
                 app:argType="integer" />
         </action>
+        <action
+            android:id="@+id/action_listFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -41,7 +43,12 @@
             app:popUpTo="@+id/listFragment"
             app:popUpToInclusive="true">
         </action>
+    </fragment>
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.harlie.dogs.view.SettingsFragment"
+        android:label="Settings">
     </fragment>
 
 </navigation>

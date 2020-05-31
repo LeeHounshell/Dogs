@@ -18,7 +18,7 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
     private val _tag = "LEE: <" + DogsListDataRepository::class.java.simpleName + ">"
 
     private val dogsApiService = DogsApiService()
-    val prefHelper = SharedPreferencesHelper(MyApplication.applicationContext())
+    private val prefHelper = SharedPreferencesHelper(MyApplication.applicationContext())
 
     init {
         Timber.tag(_tag).d("init $repositoryURL")

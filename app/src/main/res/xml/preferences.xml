@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="600"
+        android:selectAllOnFocus="true"
+        android:singleLineTitle="true"
+        android:inputType="number"
+        android:title="Set Cache Duration (in seconds)"
+        android:key="pref_cache_duration"
+        tools:ignore="UnusedAttribute" />
+
+</PreferenceScreen>

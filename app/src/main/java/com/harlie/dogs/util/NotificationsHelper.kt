@@ -19,14 +19,14 @@ import com.harlie.dogs.view.MainActivity
 class NotificationsHelper(val context: Context) {
     private val _tag = "LEE: <" + NotificationsHelper::class.java.simpleName + ">"
 
-    private val CHANNEL_ID = "dogs_channel_id"
+    private val channelId = "dogs_channel_id"
 
     fun createNotification(dog: DogBreed, icon: Bitmap?) {
         Timber.tag(_tag).d("createNotification")
         createNotificationChannel()
 
         // pass a Navigation argument to the DetailFragment
-        val bundle: Bundle = Bundle()
+        val bundle = Bundle()
         bundle.putInt("dog_Uuid", dog.uuid)
         bundle.putBoolean("deep_link", true)
 
@@ -38,7 +38,7 @@ class NotificationsHelper(val context: Context) {
             .setArguments(bundle)
             .createPendingIntent()
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.notification_dog_icon)
             .setLargeIcon(icon)
             .setContentTitle("${dog.breedName}")
@@ -61,17 +61,16 @@ class NotificationsHelper(val context: Context) {
             .setAutoCancel(true)
             .build()
 
-        val NOTIFICATION_ID = dog.uuid // so we have a different Notification for each Detail view
-        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
+        NotificationManagerCompat.from(context).notify(dog.uuid, notification) // use a different Notification Id for each Detail view
     }
 
     private fun createNotificationChannel() {
         Timber.tag(_tag).d("createNotificationChannel")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = CHANNEL_ID
+            val name = channelId
             val descriptionText = "Dogs Channel"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
             }
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
