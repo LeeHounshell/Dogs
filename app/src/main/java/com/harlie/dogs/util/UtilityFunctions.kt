@@ -11,11 +11,14 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 
+const val _tag = "LEE: <UtilityFunctions>"
 const val PERMISSION_SEND_SMS = 234
 
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
+    //Timber.tag(_tag).d("getProgressDrawable")
     return CircularProgressDrawable(context).apply {
         strokeWidth = 10f
         centerRadius = 30f
@@ -24,6 +27,7 @@ fun getProgressDrawable(context: Context): CircularProgressDrawable {
 }
 
 fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable) {
+    //Timber.tag(_tag).d("loadImage")
     val options = RequestOptions()
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
         .placeholder(progressDrawable)
@@ -35,9 +39,28 @@ fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable
         .into(this)
 }
 
+// when image is cached locally no need for .placeholder or .error
+fun ImageView.loadCachedImage(uri: String?, context: Context) {
+    //Timber.tag(_tag).d("loadCachedImage")
+    val options = RequestOptions()
+        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+
+    Glide.with(context)
+        .setDefaultRequestOptions(options)
+        .load(uri)
+        .into(this)
+}
+
 @BindingAdapter("android:imageUrl")
 fun loadImage(view: ImageView, url: String?) {
+    //Timber.tag(_tag).d("loadImage binding")
     view.loadImage(url, getProgressDrawable(view.context))
+}
+
+@BindingAdapter("bind:image_url")
+fun loadCachedImage(view: ImageView, url: String?) {
+    //Timber.tag(_tag).d("loadCachedImage binding")
+    view.loadCachedImage(url, view.context)
 }
 
 // initialize LiveData from existing value(s)
@@ -52,12 +75,15 @@ fun isNetworkAvailable(context: Context?): Boolean {
         if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                    Timber.tag(_tag).d("isNetworkAvailable true")
                     return true
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                    Timber.tag(_tag).d("isNetworkAvailable true")
                     return true
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
+                    Timber.tag(_tag).d("isNetworkAvailable true")
                     return true
                 }
             }
@@ -66,9 +92,11 @@ fun isNetworkAvailable(context: Context?): Boolean {
     else {
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+            Timber.tag(_tag).d("isNetworkAvailable true")
             return true
         }
     }
+    Timber.tag(_tag).d("isNetworkAvailable false")
     return false
 }
 

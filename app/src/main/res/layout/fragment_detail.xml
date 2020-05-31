@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:imageUrl="@{dog.breedImageUrl}"
+            app:image_url="@{dog.breedImageUrl}"
             tools:src="@mipmap/ic_dog_icon" />
 
         <TextView
