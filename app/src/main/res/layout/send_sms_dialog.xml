@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="smsInfo"
+            type="com.harlie.dogs.model.SmsInfo">
+        </variable>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/smsDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:lines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/smsText"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/to"
+            android:autofillHints="@string/to" />
+
+        <EditText
+            android:id="@+id/smsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/smsImage"
+            app:layout_constraintTop_toBottomOf="@id/smsDestination"
+            android:text="@{smsInfo.text}"
+            android:hint="@string/sms_text"
+            android:autofillHints="@string/sms_text" />
+
+        <ImageView
+            android:id="@+id/smsImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:imageUrl="@{smsInfo.imageUrl}"
+            tools:src="@mipmap/ic_dog_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/smsText"
+            android:contentDescription="@string/dog_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

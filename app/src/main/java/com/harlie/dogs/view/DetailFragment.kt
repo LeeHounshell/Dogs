@@ -1,12 +1,12 @@
 package com.harlie.dogs.view
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,7 +18,10 @@ import com.bumptech.glide.request.transition.Transition
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.databinding.FragmentDetailBinding
+import com.harlie.dogs.databinding.SendSmsDialogBinding
+import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogPalette
+import com.harlie.dogs.model.SmsInfo
 import com.harlie.dogs.repository.DogDetailDataRepository
 import com.harlie.dogs.viewmodel.DogDetailViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
@@ -34,6 +37,8 @@ class DetailFragment : Fragment() {
     private lateinit var dataBinding: FragmentDetailBinding
     private var dogUuid = 0
     private var deepLink = false
+    private var startedSendSMS = false
+    private var currentDog: DogBreed? = null
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -44,6 +49,7 @@ class DetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         Timber.tag(_tag).d("onCreateView")
+        setHasOptionsMenu(true)
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false)
         return dataBinding.root
     }
@@ -58,7 +64,8 @@ class DetailFragment : Fragment() {
         Timber.tag(_tag).d("dogUuid=${dogUuid}")
         Timber.tag(_tag).d("deepLink=${deepLink}")
         val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid))
-        dogDetailViewModel = ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
+        dogDetailViewModel =
+            ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
         dogDetailViewModel.isDeepLink = deepLink
 
         observeViewModel()
@@ -68,6 +75,7 @@ class DetailFragment : Fragment() {
     private fun observeViewModel() {
         Timber.tag(_tag).d("observeViewModel")
         dogDetailViewModel.dog.observe(viewLifecycleOwner, Observer { dog ->
+            currentDog = dog
             Timber.tag(_tag).d("observe dog_icon dog_icon=${dog}")
             dataBinding.dog = dog
             dog?.breedImageUrl?.let {
@@ -83,10 +91,77 @@ class DetailFragment : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Timber.tag(_tag).d("onCreateOptionsMenu")
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.detail_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Timber.tag(_tag).d("onOptionsItemSelected")
+        when (item.itemId) {
+            R.id.action_send_sms -> {
+                view?.let {
+                    Timber.tag(_tag).d("onOptionsItemSelected: send SMS")
+                    startedSendSMS = true
+                    (activity as MainActivity).checkSmsPermission()
+                }
+            }
+            R.id.action_share -> {
+                view?.let {
+                    Timber.tag(_tag).d("onOptionsItemSelected: share")
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun onPermissionResult(permissionGranted: Boolean) {
+        Timber.tag(_tag).d("onPermissionResult permissionGranted=${permissionGranted}")
+        if (startedSendSMS && permissionGranted) {
+            context?.let {
+                val smsInfo = SmsInfo(
+                    "",
+                    "The ${currentDog?.breedName} is bred for ${currentDog?.breedPurpose}",
+                    currentDog?.breedImageUrl,
+                    currentDog?.uuid
+                )
+                val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
+                    LayoutInflater.from(it),
+                    R.layout.send_sms_dialog,
+                    null,
+                    false
+                )
+                AlertDialog.Builder(it)
+                    .setView(dialogBinding.root)
+                    .setPositiveButton(R.string.send_sms) {dialog, which ->
+                        if (! dialogBinding.smsDestination.text.isNullOrEmpty()) {
+                            Timber.tag(_tag).d("-CLICK- send SMS")
+                            smsInfo.to = dialogBinding.smsDestination.text.toString()
+                            sendSms(smsInfo)
+                        }
+                    }
+                    .setNegativeButton("Cancel") {dialog, which ->
+                        Timber.tag(_tag).d("-CLICK- cancel SMS")
+                    }
+                    .show()
+                dialogBinding.smsInfo = smsInfo
+            }
+        }
+    }
+
+    private fun sendSms(smsInfo: SmsInfo) {
+        Timber.tag(_tag).d("sendSms smsInfo=${smsInfo}")
+        Toast.makeText(activity, "Sending SMS..", Toast.LENGTH_LONG).show()
+        uiScope.launch(Dispatchers.IO) {
+            dogDetailViewModel.sendSms(smsInfo)
+        }
+    }
+
+    // FIXME: force measure/redraw of the dog_icon image (to fix an Android rotation bug)
     override fun onConfigurationChanged(newConfig: Configuration) {
         Timber.tag(_tag).d("onConfigurationChanged")
         super.onConfigurationChanged(newConfig)
-        // FIXME: force redraw of the dog_icon image (to fix an Android rotation bug)
     }
 
     private fun setBackgroundColor(url: String) {
@@ -94,7 +169,7 @@ class DetailFragment : Fragment() {
         Glide.with(this)
             .asBitmap()
             .load(url)
-            .into(object: CustomTarget<Bitmap>() {
+            .into(object : CustomTarget<Bitmap>() {
                 override fun onLoadCleared(placeholder: Drawable?) {
                 }
 

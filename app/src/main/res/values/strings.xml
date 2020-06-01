@@ -6,4 +6,8 @@
     <string name="breed_temperament">Breed Temperament</string>
     <string name="breed_lifespan">Breed Lifespan</string>
     <string name="settingsTitle">Settings</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="share">Share</string>
+    <string name="to">To:</string>
+    <string name="sms_text">your SMS text</string>
 </resources>
