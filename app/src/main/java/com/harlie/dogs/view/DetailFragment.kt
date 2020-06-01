@@ -1,6 +1,7 @@
 package com.harlie.dogs.view
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -110,6 +111,12 @@ class DetailFragment : Fragment() {
             R.id.action_share -> {
                 view?.let {
                     Timber.tag(_tag).d("onOptionsItemSelected: share")
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "text/plain"
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Checkout this dog breed")
+                    intent.putExtra(Intent.EXTRA_TEXT, "The ${currentDog?.breedName} is bred for ${currentDog?.breedPurpose}")
+                    intent.putExtra(Intent.EXTRA_STREAM, currentDog?.breedImageUrl)
+                    startActivity(Intent.createChooser(intent, "Share with"))
                 }
             }
         }
