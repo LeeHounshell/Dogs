@@ -1,7 +1,6 @@
 package com.harlie.dogs.util
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -16,8 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
-import java.io.IOException
-import java.io.InputStream
 
 
 const val _tag = "LEE: <UtilityFunctions>"
@@ -77,11 +74,6 @@ fun NavController.navigateSafe(direction: NavDirections) {
     currentDestination?.getAction(direction.actionId)?.let { navigate(direction) }
 }
 
-fun AssetManager.readAssetsFile(fileName: String): String {
-    Timber.tag(_tag).d("readAssetsFile")
-    open(fileName).bufferedReader().use { return it.readText() }
-}
-
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(context: Context?): Boolean {
     if (context == null) return false
@@ -117,5 +109,3 @@ fun isNetworkAvailable(context: Context?): Boolean {
     Timber.tag(_tag).d("isNetworkAvailable false")
     return false
 }
-
-
