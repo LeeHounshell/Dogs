@@ -102,8 +102,7 @@ class MainActivity : AppCompatActivity() {
         Timber.tag(_tag).d("getFragment")
         val fragmentManager = supportFragmentManager
         val navHostFragment = fragmentManager.primaryNavigationFragment
-        val activeFragment = navHostFragment?.childFragmentManager?.primaryNavigationFragment
-        return activeFragment
+        return navHostFragment?.childFragmentManager?.primaryNavigationFragment
     }
 
     private fun notifyDetailFragment(permissionGranted: Boolean) {

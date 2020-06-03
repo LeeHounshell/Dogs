@@ -10,10 +10,9 @@ import com.harlie.dogs.room.DogDatabase
 class DogDetailDataRepository(dogId: Int): DataRepository() {
     private val _tag = "LEE: <" + DogDetailDataRepository::class.java.simpleName + ">"
 
-    private val dogUuid: Int
+    private val dogUuid: Int = dogId
 
     init {
-        dogUuid = dogId
         Timber.tag(_tag).d("init $dogId")
     }
 

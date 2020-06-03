@@ -97,7 +97,7 @@ abstract class DogDatabase() : RoomDatabase() {
                     }
                     Timber.tag(_tag).d("loadDatabaseDefaultData: set PREPOPULATE_DATA with ${list.size} elements")
                     this.PREPOPULATE_DATA = list
-                    if (INSTANCE != null && PREPOPULATE_DATA.size > 0) {
+                    if (INSTANCE != null && PREPOPULATE_DATA.isNotEmpty()) {
                         GlobalScope.async {
                             val dao = INSTANCE!!.dogDao()
                             val result = dao.insertAll(*PREPOPULATE_DATA.toTypedArray())

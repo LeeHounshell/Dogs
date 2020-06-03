@@ -71,7 +71,7 @@ class ListFragment : Fragment() {
         dogListViewModel.dogsList.observe(viewLifecycleOwner, Observer { dogs ->
             Timber.tag(_tag).d("observeViewModel: observe dogsLiveList size=${dogs?.size}")
             dogs?.let {
-                if (dogs.size != 0) {
+                if (dogs.isNotEmpty()) {
                     currentDogs = dogs
                     showCurrentDogs()
                     dogListViewModel.loadingComplete()
@@ -94,7 +94,7 @@ class ListFragment : Fragment() {
     }
 
     fun showCurrentDogs() {
-        val haveUuids = (currentDogs != null && currentDogs.size > 0 && currentDogs[0].uuid != 0)
+        val haveUuids = (currentDogs != null && currentDogs.isNotEmpty() && currentDogs[0].uuid != 0)
         Timber.tag(_tag).d("showCurrentDogs: haveUuids=${haveUuids}")
         if (! haveUuids) {
             refresh()

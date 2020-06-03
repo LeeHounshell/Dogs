@@ -80,7 +80,7 @@ class DetailFragment : Fragment() {
                 currentDog = dog
                 Timber.tag(_tag).d("observeViewModel: observe dog_icon dog_icon=${dog}")
                 dataBinding.dog = dog
-                dog?.breedImageUrl?.let {
+                dog.breedImageUrl?.let {
                     setBackgroundColor(it)
                 }
             }

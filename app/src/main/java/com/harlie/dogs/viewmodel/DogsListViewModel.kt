@@ -45,12 +45,12 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
 
     suspend fun initializeData(context: Context) {
         Timber.tag(_tag).d("initializeData")
-        if ( ! prefHelper.isDatabaseCreated()!!) {
+        if ( !prefHelper.isDatabaseCreated()) {
             Timber.tag(_tag).d("initializeData: create initial database")
             viewModelScope.launch {
                 fetchDogsFromDatabase(context).observeForever { dogsList ->
                     Timber.tag(_tag).d("initializeData: observeForever dogsList.size=${dogsList.size}")
-                    if (dogsList.size > 0) {
+                    if (dogsList.isNotEmpty()) {
                         dogsRepository.storeDogsLocally(dogsList)
                         dogsMutableList.postValue(dogsList)
                     }
