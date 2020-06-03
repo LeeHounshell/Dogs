@@ -47,6 +47,7 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
         databaseScope.launch {
             val context: Context = MyApplication.applicationContext()
             val dao = DogDatabase.getInstance(context)?.dogDao()
+            dao?.deleteAllDogs() // since we are replacing the cache, delete old data first
             val result = dao?.insertAll(*dogsList.toTypedArray())
             result.let {
                 var i = 0
