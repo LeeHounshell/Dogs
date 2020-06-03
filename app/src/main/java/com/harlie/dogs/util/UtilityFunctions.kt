@@ -118,19 +118,4 @@ fun isNetworkAvailable(context: Context?): Boolean {
     return false
 }
 
-fun loadFileAsString(context: Context, inFile: String): String? {
-    Timber.tag(_tag).d("loadFileAsString: inFile=${inFile}")
-    var contents: String? = ""
-    try {
-        val stream: InputStream = context.assets.open(inFile)
-        val size: Int = stream.available()
-        val buffer = ByteArray(size)
-        stream.read(buffer)
-        stream.close()
-        contents = String(buffer)
-    } catch (e: IOException) {
-        Timber.tag(_tag).e("FAILED loadFileAsString: error=${e}")
-    }
-    return contents
-}
 
