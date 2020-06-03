@@ -1,18 +1,24 @@
 package com.harlie.dogs.util
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
+import java.io.IOException
+import java.io.InputStream
+
 
 const val _tag = "LEE: <UtilityFunctions>"
 const val PERMISSION_SEND_SMS = 234
@@ -66,12 +72,24 @@ fun loadCachedImage(view: ImageView, url: String?) {
 // initialize LiveData from existing value(s)
 fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(initialValue) }
 
+fun NavController.navigateSafe(direction: NavDirections) {
+    Timber.tag(_tag).d("navigateSafe")
+    currentDestination?.getAction(direction.actionId)?.let { navigate(direction) }
+}
+
+fun AssetManager.readAssetsFile(fileName: String): String {
+    Timber.tag(_tag).d("readAssetsFile")
+    open(fileName).bufferedReader().use { return it.readText() }
+}
+
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(context: Context?): Boolean {
     if (context == null) return false
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
@@ -98,5 +116,21 @@ fun isNetworkAvailable(context: Context?): Boolean {
     }
     Timber.tag(_tag).d("isNetworkAvailable false")
     return false
+}
+
+fun loadFileAsString(context: Context, inFile: String): String? {
+    Timber.tag(_tag).d("loadFileAsString: inFile=${inFile}")
+    var contents: String? = ""
+    try {
+        val stream: InputStream = context.assets.open(inFile)
+        val size: Int = stream.available()
+        val buffer = ByteArray(size)
+        stream.read(buffer)
+        stream.close()
+        contents = String(buffer)
+    } catch (e: IOException) {
+        Timber.tag(_tag).e("FAILED loadFileAsString: error=${e}")
+    }
+    return contents
 }
 

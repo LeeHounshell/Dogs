@@ -35,9 +35,10 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
         )
     }
 
-    suspend fun fetchFromDatabase(): LiveData<List<DogBreed>> {
+    suspend fun fetchFromDatabase(context: Context): LiveData<List<DogBreed>> {
         Timber.tag(_tag).d("fetchFromDatabase")
-        val dogsList = DogDatabase(MyApplication.applicationContext()).dogDao().getAllDogs()
+        val dogDao = DogDatabase.getInstance(context)!!.dogDao()
+        val dogsList = dogDao.getAllDogs()
         return MutableLiveData<List<DogBreed>>().default(dogsList)
     }
 
@@ -45,15 +46,16 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
         Timber.tag(_tag).d("storeDogsLocally")
         databaseScope.launch {
             val context: Context = MyApplication.applicationContext()
-            val dao = DogDatabase(context).dogDao()
-            dao.deleteAllDogs()
-            val result = dao.insertAll(*dogsList.toTypedArray())
-            var i = 0
-            while (i < dogsList.size) {
-                dogsList[i].uuid = result[i].toInt()
-                ++i
+            val dao = DogDatabase.getInstance(context)?.dogDao()
+            val result = dao?.insertAll(*dogsList.toTypedArray())
+            result.let {
+                var i = 0
+                while (i < dogsList.size) {
+                    dogsList[i].uuid = it?.get(i)?.toInt() ?: 0
+                    ++i
+                }
+                prefHelper.saveUpdateTime(System.nanoTime())
             }
-            prefHelper.saveUpdateTime(System.nanoTime())
         }
     }
 

@@ -3,8 +3,8 @@ package com.harlie.dogs.util
 import com.github.ajalt.timberkt.Timber
 import org.greenrobot.eventbus.EventBus
 
-class RxErrorEvent(description: String) {
-    private val _tag = "LEE: <" + RxErrorEvent::class.java.simpleName + ">"
+class RoomErrorEvent(description: String) {
+    private val _tag = "LEE: <" + RoomErrorEvent::class.java.simpleName + ">"
 
     var errorDescription: String = description
 
@@ -14,8 +14,7 @@ class RxErrorEvent(description: String) {
     }
 
     override fun toString(): String {
-        return "RxErrorEvent(errorDescription='$errorDescription')"
+        return "RoomErrorEvent(errorDescription='$errorDescription')"
     }
 
 }
-

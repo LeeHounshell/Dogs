@@ -76,16 +76,22 @@ class DetailFragment : Fragment() {
     private fun observeViewModel() {
         Timber.tag(_tag).d("observeViewModel")
         dogDetailViewModel.dog.observe(viewLifecycleOwner, Observer { dog ->
-            currentDog = dog
-            Timber.tag(_tag).d("observe dog_icon dog_icon=${dog}")
-            dataBinding.dog = dog
-            dog?.breedImageUrl?.let {
-                setBackgroundColor(it)
+            if (dog != null) {
+                currentDog = dog
+                Timber.tag(_tag).d("observeViewModel: observe dog_icon dog_icon=${dog}")
+                dataBinding.dog = dog
+                dog?.breedImageUrl?.let {
+                    setBackgroundColor(it)
+                }
+            }
+            else {
+                Timber.tag(_tag).d("observeViewModel: need to refresh()")
+                refresh()
             }
         })
     }
 
-    private fun refresh() {
+    fun refresh() {
         Timber.tag(_tag).d("refresh")
         uiScope.launch(Dispatchers.IO) {
             dogDetailViewModel.fetch()

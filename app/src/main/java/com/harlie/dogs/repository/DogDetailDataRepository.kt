@@ -1,12 +1,11 @@
 package com.harlie.dogs.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.github.ajalt.timberkt.Timber
-import com.harlie.dogs.MyApplication
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.room.DogDatabase
-import com.harlie.dogs.util.default
 
 class DogDetailDataRepository(dogId: Int): DataRepository() {
     private val _tag = "LEE: <" + DogDetailDataRepository::class.java.simpleName + ">"
@@ -14,14 +13,17 @@ class DogDetailDataRepository(dogId: Int): DataRepository() {
     private val dogUuid: Int
 
     init {
-        Timber.tag(_tag).d("init $dogId")
         dogUuid = dogId
+        Timber.tag(_tag).d("init $dogId")
     }
 
-    suspend fun fetchFromDatabase(): LiveData<DogBreed> {
+    suspend fun fetchFromDatabase(context: Context): LiveData<DogBreed> {
         Timber.tag(_tag).d("fetchFromDatabase dogUuid=${dogUuid}")
-        val dog = DogDatabase(MyApplication.applicationContext()).dogDao().getDog(dogUuid)
-        return MutableLiveData<DogBreed>().default(dog)
+        val dogDao = DogDatabase.getInstance(context)!!.dogDao()
+        val dog = dogDao.getDog(dogUuid)
+        val mutableLiveData: MutableLiveData<DogBreed> = MutableLiveData()
+        mutableLiveData.value = dog
+        return mutableLiveData
     }
 
 }

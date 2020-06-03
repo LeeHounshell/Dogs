@@ -3,7 +3,6 @@ package com.harlie.dogs.view
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,9 +10,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
+import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.repository.DogsListDataRepository
-import com.harlie.dogs.util.RxErrorEvent
+import com.harlie.dogs.util.navigateSafe
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -21,15 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 class ListFragment : Fragment() {
     private val _tag = "LEE: <" + ListFragment::class.java.simpleName + ">"
 
     private lateinit var dogListViewModel: DogsListViewModel
     private val dogListAdapter = DogsListAdapter(arrayListOf())
+    private var currentDogs: List<DogBreed> = emptyList()
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -71,11 +69,17 @@ class ListFragment : Fragment() {
     private fun observeViewModel() {
         Timber.tag(_tag).d("observeViewModel")
         dogListViewModel.dogsList.observe(viewLifecycleOwner, Observer { dogs ->
-            Timber.tag(_tag).d("observe dogsLiveList size=${dogs?.size}")
+            Timber.tag(_tag).d("observeViewModel: observe dogsLiveList size=${dogs?.size}")
             dogs?.let {
-                dogsList.visibility = View.VISIBLE
-                dogListAdapter.updateDogList(dogs)
-                dogListViewModel.loadingComplete()
+                if (dogs.size != 0) {
+                    currentDogs = dogs
+                    showCurrentDogs()
+                    dogListViewModel.loadingComplete()
+                }
+                else {
+                    Timber.tag(_tag).d("observeViewModel: need to refresh()")
+                    refresh()
+                }
             }
         })
         dogListViewModel.dogsLoading.observe(viewLifecycleOwner, Observer { isLoading ->
@@ -89,7 +93,23 @@ class ListFragment : Fragment() {
         })
     }
 
-    private fun refresh() {
+    fun showCurrentDogs() {
+        val haveUuids = (currentDogs != null && currentDogs.size > 0 && currentDogs[0].uuid != 0)
+        Timber.tag(_tag).d("showCurrentDogs: haveUuids=${haveUuids}")
+        if (! haveUuids) {
+            refresh()
+        }
+        else {
+            // this forces the RecyclerView to redraw images (to fix an Android rotation bug)
+            val myAdapter = dogsList.adapter
+            dogsList.adapter = myAdapter
+            // set adapter data as current dogs list
+            dogListAdapter.updateDogList(currentDogs)
+            dogsList.visibility = View.VISIBLE
+        }
+    }
+
+    fun refresh() {
         Timber.tag(_tag).d("refresh")
         uiScope.launch(Dispatchers.IO) {
             dogListViewModel.refresh()
@@ -109,7 +129,7 @@ class ListFragment : Fragment() {
                 view?.let {
                     Timber.tag(_tag).d("onOptionsItemSelected: navigate to SettingsFragment")
                     val action = ListFragmentDirections.actionListFragmentToSettingsFragment()
-                    it.findNavController().navigate(action)
+                    it.findNavController().navigateSafe(action)
                 }
             }
         }
@@ -119,34 +139,14 @@ class ListFragment : Fragment() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         Timber.tag(_tag).d("onConfigurationChanged")
         super.onConfigurationChanged(newConfig)
-        // this forces the RecyclerView to redraw images (to fix an Android rotation bug)
-        val myAdapter = dogsList.adapter
-        dogsList.adapter = myAdapter
+        showCurrentDogs()
+        dogListViewModel.loadingComplete()
     }
 
     override fun onDestroy(){
         Timber.tag(_tag).d("onDestroy")
         job.cancel()
         super.onDestroy()
-    }
-
-    override fun onStart() {
-        Timber.tag(_tag).d("onStart")
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        Timber.tag(_tag).d("onStop")
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onRxErrorEvent(rxError_event: RxErrorEvent) {
-        Timber.tag(_tag).d("onRxErrorEvent")
-        dogListViewModel.loadingComplete()
-        Toast.makeText(activity, rxError_event.errorDescription, Toast.LENGTH_LONG).show()
     }
 
 }

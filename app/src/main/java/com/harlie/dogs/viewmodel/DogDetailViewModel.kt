@@ -18,6 +18,7 @@ import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.SmsInfo
 import com.harlie.dogs.repository.DogDetailDataRepository
 import com.harlie.dogs.util.NotificationsHelper
+import com.harlie.dogs.util.RoomErrorEvent
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.launch
 
@@ -35,6 +36,10 @@ class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
     init {
         Timber.tag(_tag).d("init")
         dogRepository = repository
+        // prefetch from Room
+        viewModelScope.launch {
+            dogRepository.fetchFromDatabase(MyApplication.applicationContext())
+        }
     }
 
     // Fragment Observers subscribe to this immutable LiveData
@@ -45,11 +50,18 @@ class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
         Timber.tag(_tag).d("fetch")
         viewModelScope.launch {
             fetchDogFromDatabase().observeForever { dog ->
-                Timber.tag(_tag).d("db observeForever dog_icon=${dog}")
-                dogMutableDetail.postValue(dog)
-                if (! isDeepLink) {
-                    // create and run a Notification
-                    sendNotificationWithDogImage(dog, dog.breedImageUrl)
+                if (dog != null) {
+                    Timber.tag(_tag).d("db observeForever dog_icon=${dog}")
+                    dogMutableDetail.postValue(dog)
+                    if (!isDeepLink) {
+                        // create and run a Notification
+                        sendNotificationWithDogImage(dog, dog.breedImageUrl)
+                    }
+                }
+                else {
+                    Timber.tag(_tag).e("UNABLE TO LOAD DOGBREED FROM DATABASE!")
+                    val roomErrorEvent = RoomErrorEvent("Unable to load Room dog data. Try again.")
+                    roomErrorEvent.post()
                 }
             }
         }
@@ -77,7 +89,7 @@ class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
     // Initiate a Database API call to get the DogBreed
     private suspend fun fetchDogFromDatabase(): LiveData<DogBreed> {
         Timber.tag(_tag).d("fetchDogFromDatabase")
-        return dogRepository.fetchFromDatabase()
+        return dogRepository.fetchFromDatabase(MyApplication.applicationContext())
     }
 
     // FIXME: SmsInfo has an imageUrl but MMS is required to send image data via text. The image is not sent.
