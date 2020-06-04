@@ -93,6 +93,11 @@ class ListFragment : Fragment() {
         })
     }
 
+    /*
+     * If the internal database does not exist, the first call here results from loading local default data
+     * The second call will be from the Network to replace the local cache, if network is available
+     * The third call will be to get the assigned detail uuids for each DogBreed.
+     */
     fun showCurrentDogs() {
         val haveUuids = (currentDogs != null && currentDogs.isNotEmpty() && currentDogs[0].uuid != 0)
         Timber.tag(_tag).d("showCurrentDogs: haveUuids=${haveUuids}")
