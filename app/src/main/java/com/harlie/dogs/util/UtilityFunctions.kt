@@ -14,7 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.github.ajalt.timberkt.Timber
+import com.google.gson.Gson
 import com.harlie.dogs.R
+import com.harlie.dogs.room.DogDatabase
+import org.json.JSONArray
+import java.io.InputStream
 
 
 const val _tag = "LEE: <UtilityFunctions>"
@@ -109,3 +113,38 @@ fun isNetworkAvailable(context: Context?): Boolean {
     Timber.tag(_tag).d("isNetworkAvailable false")
     return false
 }
+
+inline fun <reified T>extractArrayFromJson(rawJson: String?): MutableList<T> {
+    val list: MutableList<T> = mutableListOf()
+    if (rawJson != null) {
+        val array = JSONArray(rawJson)
+        Timber.tag(DogDatabase._tag).d("extractArrayFromJson: processing length=${array.length()}")
+        if (array.length() > 0) {
+            val gson = Gson()
+            var i = 0
+            while (i < array.length()) {
+                list.add(
+                    gson.fromJson(
+                        array.getJSONObject(i).toString(),
+                        T::class.java
+                    )
+                )
+                i++
+            }
+        }
+    }
+    return list
+}
+
+fun readJsonAsset(context: Context, fileName: String): String? {
+    Timber.tag(DogDatabase._tag).d("readJsonAsset: fileName=${fileName}")
+    var rawJson: String? = null
+    try {
+        val inputStream: InputStream = context.assets.open(fileName)
+        rawJson = inputStream.bufferedReader().use { it.readText() }
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+    }
+    return rawJson
+}
+

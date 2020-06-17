@@ -29,9 +29,9 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
 
     init {
         Timber.tag(_tag).d("init")
-        dogsMutableLoading.value = false
         dogsRepository = repository
         viewModelScope.launch {
+            dogsMutableLoading.postValue(false)
             initializeData(MyApplication.applicationContext())
         }
     }
