@@ -85,45 +85,42 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
         val context = MyApplication.applicationContext()
         val updateTime = dogsRepository.prefHelper.getUpdateTime()
         Timber.tag(_tag).d("refresh: updateTime=${updateTime}")
-        if ( ! isNetworkAvailable(context)
-            || ((updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime))
-        ) {
-            Timber.tag(_tag).d("refresh: fetch data from database")
-            viewModelScope.launch {
-                fetchDogsFromDatabase(context).observeForever { dogsList ->
-                    Timber.tag(_tag).d("refresh: db observeForever dogsList.size=${dogsList.size}")
-                    dogsMutableList.postValue(dogsList)
-                }
-            }
+        if (((updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime))
+            || ! isNetworkAvailable(context))
+        {
+            Timber.tag(_tag).d("refresh: fetch data from DATABASE")
+            databaseRefresh(context)
         }
         else if (isNetworkAvailable(context)){
-            Timber.tag(_tag).d("refresh: fetch data from network")
-            viewModelScope.launch {
-                fetchDogsFromRemote().observeForever { dogsList ->
-                    Timber.tag(_tag).d("refresh: net observeForever dogsList.size=${dogsList.size}")
-                    synchronized (DogDatabase.Companion.GLOBAL_ACCESS_LOCK) {
-                        didNetworkRefresh = true
-                        dogsRepository.storeDogsLocally(dogsList)
-                        dogsMutableList.postValue(dogsList)
-                    }
-                }
-            }
+            Timber.tag(_tag).d("refresh: fetch data from NETWORK")
+            networkRefresh()
         }
         else {
             Timber.tag(_tag).w("refresh: NETWORK NOT AVAILABLE")
         }
     }
 
-    private fun checkCacheDuration() {
-        Timber.tag(_tag).d("checkCacheDuration")
-        val cachePreference = dogsRepository.prefHelper.getCacheDuration()
-        try {
-            val cachePreferenceInt = cachePreference?.toInt() ?: 5 * 60
-            refreshTime = cachePreferenceInt.times(1000 * 1000 * 1000L) // seconds to nano seconds
-            Timber.tag(_tag).d("checkCacheDuration: new refreshTime=${refreshTime}")
+    private fun databaseRefresh(context: Context) {
+        Timber.tag(_tag).d("databaseRefresh")
+        viewModelScope.launch {
+            fetchDogsFromDatabase(context).observeForever { dogsList ->
+                Timber.tag(_tag).d("databaseRefresh: observeForever dogsList.size=${dogsList.size}")
+                dogsMutableList.postValue(dogsList)
+            }
         }
-        catch (e: NumberFormatException) {
-            Timber.tag(_tag).e("checkCacheDuration: bad number e=${e}")
+    }
+
+    private fun networkRefresh() {
+        Timber.tag(_tag).d("networkRefresh")
+        viewModelScope.launch {
+            fetchDogsFromRemote().observeForever { dogsList ->
+                Timber.tag(_tag).d("networkRefresh: observeForever dogsList.size=${dogsList.size}")
+                synchronized(DogDatabase.GLOBAL_ACCESS_LOCK) {
+                    didNetworkRefresh = true
+                    dogsRepository.storeDogsLocally(dogsList)
+                    dogsMutableList.postValue(dogsList)
+                }
+            }
         }
     }
 
@@ -139,6 +136,19 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
         return dogsRepository.fetchFromRemote()
     }
 
+    private fun checkCacheDuration() {
+        Timber.tag(_tag).d("checkCacheDuration")
+        val cachePreference = dogsRepository.prefHelper.getCacheDuration()
+        try {
+            val cachePreferenceInt = cachePreference?.toInt() ?: 5 * 60
+            refreshTime = cachePreferenceInt.times(1000 * 1000 * 1000L) // seconds to nano seconds
+            Timber.tag(_tag).d("checkCacheDuration: new refreshTime=${refreshTime}")
+        }
+        catch (e: NumberFormatException) {
+            Timber.tag(_tag).e("checkCacheDuration: bad number e=${e}")
+        }
+    }
+
     // display initial database creation for first app run
     fun setDogsList(dogsList: List<DogBreed>) {
         Timber.tag(_tag).d("setDogsList: size=${dogsList.size}")
@@ -146,7 +156,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     }
 
     fun checkIfLoadingIsComplete() {
-        Timber.tag(_tag).d("loadingComplete")
+        Timber.tag(_tag).d("checkIfLoadingIsComplete")
         if (! didNetworkRefresh) {
             if (isNetworkAvailable(MyApplication.applicationContext())) {
                 viewModelScope.launch {
@@ -155,7 +165,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
                 }
             }
             else {
-                Timber.tag(_tag).d("loadingComplete: NO NETWORK")
+                Timber.tag(_tag).d("checkIfLoadingIsComplete: NO NETWORK")
             }
         }
         dogsMutableLoading.value = false
