@@ -1,8 +1,13 @@
 package com.harlie.dogs
 
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
+import kotlin.test.assertTrue
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -10,8 +15,30 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+    @MockK
+    lateinit var mockList: List<String>
+
+    @Before
+    fun setup() {
+        System.out.println("setup")
+        MockKAnnotations.init(this)
+    }
+
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun dummyUnitTest() {
+        System.out.println("dummyUnitTest")
+        every {mockList.size} returns 5
+        assertTrue(mockList.size == 5, "Expect the List size is 5")
+    }
+
+    @After
+    fun teardown() {
+        System.out.println("teardown")
     }
 }
