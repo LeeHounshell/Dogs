@@ -95,9 +95,6 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
             Timber.tag(_tag).d("refresh: fetch data from NETWORK")
             networkRefresh()
         }
-        else {
-            Timber.tag(_tag).w("refresh: NETWORK NOT AVAILABLE")
-        }
     }
 
     private fun databaseRefresh(context: Context) {
