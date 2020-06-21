@@ -145,26 +145,26 @@ class MainActivity : AppCompatActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNavigationErrorEvent(navigationError_event: NavigationErrorEvent) {
         Timber.tag(_tag).e("onNavigationErrorEvent: ${navigationError_event}")
-        Toast.makeText(this, navigationError_event.errorDescription, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, navigationError_event.description, Toast.LENGTH_LONG).show()
         recover()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRoomErrorEvent(roomError_event: RoomErrorEvent) {
-        Timber.tag(_tag).d("onRoomErrorEvent: ${roomError_event}")
-        Toast.makeText(this, roomError_event.errorDescription, Toast.LENGTH_LONG).show()
+        Timber.tag(_tag).e("onRoomErrorEvent: ${roomError_event}")
+        Toast.makeText(this, roomError_event.description, Toast.LENGTH_LONG).show()
         recover()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRxErrorEvent(rxError_event: RxErrorEvent) {
         Timber.tag(_tag).e("onRxErrorEvent: ${rxError_event}")
-        Toast.makeText(this, rxError_event.errorDescription, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, rxError_event.description, Toast.LENGTH_LONG).show()
         recover()
     }
 
     private fun recover() {
-        Timber.tag(_tag).d("recover")
+        Timber.tag(_tag).e("recover")
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

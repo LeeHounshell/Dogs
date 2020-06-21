@@ -20,7 +20,6 @@ import com.harlie.dogs.room.DogDatabase
 import org.json.JSONArray
 import java.io.InputStream
 
-
 const val _tag = "LEE: <UtilityFunctions>"
 const val PERMISSION_SEND_SMS = 234
 
@@ -72,6 +71,7 @@ fun loadCachedImage(view: ImageView, url: String?) {
 
 // initialize LiveData from existing value(s)
 fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(initialValue) }
+fun <T : Any?> MutableLiveData<T>.postDefault(initialValue: T) = apply { postValue(initialValue) }
 
 fun NavController.navigateSafe(direction: NavDirections) {
     Timber.tag(_tag).d("navigateSafe")

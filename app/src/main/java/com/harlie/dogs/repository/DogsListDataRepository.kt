@@ -14,21 +14,18 @@ import com.harlie.dogs.util.default
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
-class DogsListDataRepository(repositoryURL: String): DataRepository() {
+class DogsListDataRepository(val repositoryURL: String, val apiService: DogsApiService, val prefHelper: SharedPreferencesHelper): DataRepository() {
     private val _tag = "LEE: <" + DogsListDataRepository::class.java.simpleName + ">"
-
-    private val dogsApiService = DogsApiService()
-    private val prefHelper = SharedPreferencesHelper(MyApplication.applicationContext())
 
     init {
         Timber.tag(_tag).d("init $repositoryURL")
-        dogsApiService.setRealBaseUrl(repositoryURL)
+        apiService.setRealBaseUrl(repositoryURL)
     }
 
-    suspend fun fetchFromRemote(): LiveData<List<DogBreed>> {
+    fun fetchFromRemote(): LiveData<List<DogBreed>> {
         Timber.tag(_tag).d("fetchFromRemote")
         return MyLiveDataReactiveStreams.fromPublisher(
-            dogsApiService.getRequestApi()
+            apiService.getRequestApi()
                 .getFlowableDogs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.computation())
@@ -44,6 +41,7 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
 
     fun storeDogsLocally(dogsList: List<DogBreed>) {
         Timber.tag(_tag).d("storeDogsLocally")
+        prefHelper.saveUpdateTime(System.nanoTime())
         databaseScope.launch {
             val context: Context = MyApplication.applicationContext()
             val dao = DogDatabase.getInstance(context)?.dogDao()
@@ -55,7 +53,7 @@ class DogsListDataRepository(repositoryURL: String): DataRepository() {
                     dogsList[i].uuid = it?.get(i)?.toInt() ?: 0
                     ++i
                 }
-                prefHelper.saveUpdateTime(System.nanoTime())
+                prefHelper.markDatabaseCreated()
             }
         }
     }

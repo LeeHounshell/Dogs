@@ -22,8 +22,10 @@ import com.harlie.dogs.databinding.FragmentDetailBinding
 import com.harlie.dogs.databinding.SendSmsDialogBinding
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogPalette
+import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.model.SmsInfo
 import com.harlie.dogs.repository.DogDetailDataRepository
+import com.harlie.dogs.util.SharedPreferencesHelper
 import com.harlie.dogs.viewmodel.DogDetailViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +66,9 @@ class DetailFragment : Fragment() {
         }
         Timber.tag(_tag).d("dogUuid=${dogUuid}")
         Timber.tag(_tag).d("deepLink=${deepLink}")
-        val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid))
+        val apiService = DogsApiService()
+        val prefHelper = SharedPreferencesHelper()
+        val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid, apiService, prefHelper))
         dogDetailViewModel =
             ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
         dogDetailViewModel.isDeepLink = deepLink

@@ -8,16 +8,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.github.ajalt.timberkt.Timber
-import com.google.gson.Gson
 import com.harlie.dogs.MyApplication
 import com.harlie.dogs.model.DogBreed
+import com.harlie.dogs.util.RoomLoadedEvent
 import com.harlie.dogs.util.extractArrayFromJson
 import com.harlie.dogs.util.readJsonAsset
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import org.json.JSONArray
-import java.io.InputStream
-
 
 @Database(entities = [DogBreed::class], version = 1)
 abstract class DogDatabase() : RoomDatabase() {
@@ -29,7 +26,9 @@ abstract class DogDatabase() : RoomDatabase() {
 
         @Volatile
         private var INSTANCE: DogDatabase? = null
-        private const val LOCK = "lock"
+
+        const val GLOBAL_ACCESS_LOCK = "access_lock"
+        private const val CREATION_LOCK = "lock"
         private lateinit var PREPOPULATE_DATA: List<DogBreed>
 
         private val roomCallBack: Callback = object : Callback() {
@@ -44,7 +43,7 @@ abstract class DogDatabase() : RoomDatabase() {
 
         fun getInstance(context: Context): DogDatabase? {
             Timber.tag(_tag).d("getInstance")
-            INSTANCE ?: synchronized(LOCK) {
+            INSTANCE ?: synchronized(CREATION_LOCK) {
                 INSTANCE ?: buildDatabase(context).also {
                     INSTANCE = it.build()
                 }
@@ -68,7 +67,7 @@ abstract class DogDatabase() : RoomDatabase() {
                 )
 */
 
-        private fun loadDatabaseDefaultData(context: Context) {
+        fun loadDatabaseDefaultData(context: Context) {
             Timber.tag(_tag).d("loadDatabaseDefaultData")
             this.PREPOPULATE_DATA = emptyList()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -83,13 +82,17 @@ abstract class DogDatabase() : RoomDatabase() {
             }
         }
 
-        private fun saveDefaultDataToDatabase() {
+        // the first app run creates a default database containing local assets
+        fun saveDefaultDataToDatabase() {
             Timber.tag(_tag).d("saveDefaultDataToDatabase")
             if (INSTANCE != null && PREPOPULATE_DATA.isNotEmpty()) {
                 GlobalScope.async {
                     val dao = INSTANCE!!.dogDao()
                     val result = dao.insertAll(*PREPOPULATE_DATA.toTypedArray())
-                    Timber.tag(_tag).d("saveDefaultDataToDatabase: result.size=${result.size}")
+                    val message = "result.size=${result.size}"
+                    Timber.tag(_tag).d("saveDefaultDataToDatabase: ${message}")
+                    val roomLoadedEvent = RoomLoadedEvent(message, PREPOPULATE_DATA)
+                    roomLoadedEvent.post()
                 }
             }
         }

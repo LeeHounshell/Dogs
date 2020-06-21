@@ -22,11 +22,9 @@ import com.harlie.dogs.util.RoomErrorEvent
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.launch
 
-
-class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
+class DogDetailViewModel(val repository: DogDetailDataRepository): MyViewModel() {
     private val _tag = "LEE: <" + DogDetailViewModel::class.java.simpleName + ">"
 
-    private val dogRepository: DogDetailDataRepository
     var isDeepLink: Boolean = false
 
     private val dogMutableDetail by lazy {
@@ -35,10 +33,9 @@ class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
 
     init {
         Timber.tag(_tag).d("init")
-        dogRepository = repository
         // prefetch from Room
         viewModelScope.launch {
-            dogRepository.fetchFromDatabase(MyApplication.applicationContext())
+            repository.fetchFromDatabase(MyApplication.applicationContext())
         }
     }
 
@@ -89,7 +86,7 @@ class DogDetailViewModel(repository: DogDetailDataRepository): MyViewModel() {
     // Initiate a Database API call to get the DogBreed
     private suspend fun fetchDogFromDatabase(): LiveData<DogBreed> {
         Timber.tag(_tag).d("fetchDogFromDatabase")
-        return dogRepository.fetchFromDatabase(MyApplication.applicationContext())
+        return repository.fetchFromDatabase(MyApplication.applicationContext())
     }
 
     // FIXME: SmsInfo has an imageUrl but MMS is required to send image data via text. The image is not sent.

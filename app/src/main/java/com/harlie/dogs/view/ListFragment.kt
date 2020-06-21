@@ -13,6 +13,9 @@ import com.harlie.dogs.R
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.util.RoomLoadedEvent
+import com.harlie.dogs.util.SharedPreferencesHelper
+import com.harlie.dogs.util.isNetworkAvailable
 import com.harlie.dogs.util.navigateSafe
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
@@ -21,6 +24,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.util.*
+import kotlin.concurrent.schedule
 
 class ListFragment : Fragment() {
     private val _tag = "LEE: <" + ListFragment::class.java.simpleName + ">"
@@ -28,6 +36,8 @@ class ListFragment : Fragment() {
     private lateinit var dogListViewModel: DogsListViewModel
     private val dogListAdapter = DogsListAdapter(arrayListOf())
     private var currentDogs: List<DogBreed> = emptyList()
+    private var databaseInitialized = false
+    private var haveUuids = false
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -46,7 +56,9 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         val repositoryURL: String = DogsApiService.BASE_URL
-        val viewModelFactory = MyViewModelFactory(DogsListDataRepository(repositoryURL))
+        val apiService = DogsApiService()
+        val prefHelper = SharedPreferencesHelper()
+        val viewModelFactory = MyViewModelFactory(DogsListDataRepository(repositoryURL, apiService, prefHelper))
         dogListViewModel = ViewModelProvider(this, viewModelFactory).get(DogsListViewModel::class.java)
         dogsList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -63,7 +75,7 @@ class ListFragment : Fragment() {
             refresh()
         }
 
-        refresh()
+        dogListViewModel.checkRefresh()
     }
 
     private fun observeViewModel() {
@@ -71,14 +83,10 @@ class ListFragment : Fragment() {
         dogListViewModel.dogsList.observe(viewLifecycleOwner, Observer { dogs ->
             Timber.tag(_tag).d("observeViewModel: observe dogsLiveList size=${dogs?.size}")
             dogs?.let {
+                currentDogs = dogs
+                showCurrentDogs()
                 if (dogs.isNotEmpty()) {
-                    currentDogs = dogs
-                    showCurrentDogs()
-                    dogListViewModel.loadingComplete()
-                }
-                else {
-                    Timber.tag(_tag).d("observeViewModel: need to refresh()")
-                    refresh()
+                    dogListViewModel.checkIfLoadingIsComplete()
                 }
             }
         })
@@ -93,18 +101,14 @@ class ListFragment : Fragment() {
         })
     }
 
-    /*
-     * If the internal database does not exist, the first call here results from loading local default data
-     * The second call will be from the Network to replace the local cache, if network is available
-     * The third call will be to get the assigned detail uuids for each DogBreed.
-     */
     fun showCurrentDogs() {
-        val haveUuids = (currentDogs != null && currentDogs.isNotEmpty() && currentDogs[0].uuid != 0)
-        Timber.tag(_tag).d("showCurrentDogs: haveUuids=${haveUuids}")
+        haveUuids = (currentDogs.isNotEmpty() && currentDogs[0].uuid != 0)
+        Timber.tag(_tag).d("--------- showCurrentDogs: haveUuids=${haveUuids}")
         if (! haveUuids) {
             refresh()
         }
-        else {
+        else if (currentDogs.isNotEmpty()) {
+            Timber.tag(_tag).d("showCurrentDogs: update the RecyclerView")
             // this forces the RecyclerView to redraw images (to fix an Android rotation bug)
             val myAdapter = dogsList.adapter
             dogsList.adapter = myAdapter
@@ -116,8 +120,16 @@ class ListFragment : Fragment() {
 
     fun refresh() {
         Timber.tag(_tag).d("refresh")
-        uiScope.launch(Dispatchers.IO) {
-            dogListViewModel.refresh()
+        Timer("refresh", false).schedule(500) {
+            uiScope.launch(Dispatchers.IO) {
+                if (haveUuids && currentDogs.size > 0 && ! isNetworkAvailable(context)) {
+                    Timber.tag(_tag).d("refresh: NO NETWORK, SHOW EXISTING DATA")
+                }
+                else {
+                    Timber.tag(_tag).d("refresh: do the refresh")
+                    dogListViewModel.refresh()
+                }
+            }
         }
     }
 
@@ -145,7 +157,28 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("onConfigurationChanged")
         super.onConfigurationChanged(newConfig)
         showCurrentDogs()
-        dogListViewModel.loadingComplete()
+        dogListViewModel.checkIfLoadingIsComplete()
+    }
+
+    override fun onStart() {
+        Timber.tag(_tag).d("onStart")
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        Timber.tag(_tag).d("onStop")
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRoomLoadedEvent(roomLoaded_event: RoomLoadedEvent) {
+        Timber.tag(_tag).d("DATABASE INITIALIZED ===> onRoomLoadedEvent: size=${roomLoaded_event.dogsList.size} <===")
+        databaseInitialized = true
+        if ( ! isNetworkAvailable(context)) {
+            dogListViewModel.setDogsList(roomLoaded_event.dogsList)
+        }
     }
 
     override fun onDestroy(){

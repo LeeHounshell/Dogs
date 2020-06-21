@@ -1,24 +1,23 @@
 package com.harlie.dogs.util
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.harlie.dogs.MyApplication
 
 class SharedPreferencesHelper {
+
+    val context = MyApplication.applicationContext()
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     companion object {
         private const val PREF_HAVE_DATABASE = "pref_have_database"
         private const val PREF_TIME = "pref_time"
         private const val PREF_DURATION = "pref_cache_duration"
 
-        private lateinit var prefs: SharedPreferences
-
         @Volatile private var instance: SharedPreferencesHelper? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context): SharedPreferencesHelper = instance ?: synchronized(LOCK) {
-            prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        operator fun invoke(): SharedPreferencesHelper = instance ?: synchronized(LOCK) {
             instance ?: buildHelper().also {
                 instance = it
             }
