@@ -5,18 +5,21 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
 
     defaultConfig {
         applicationId "com.harlie.dogs"
-        minSdkVersion 15
-        targetSdkVersion 29
+        minSdkVersion 19
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        // The following argument makes the Android Test Orchestrator run its
+        // "pm clear" command after each test invocation. This command ensures
+        // that the app's state is completely cleared between tests.
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -46,8 +49,28 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
-}
+    testOptions {
+        //execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        unitTests {
+            includeAndroidResources = true
+            unitTests.returnDefaultValues = true
+        }
+    }
 
+    packagingOptions {
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+        exclude("META-INF/*.kotlin_module")
+    }
+}
 
 def kotlin_version = '1.3.72'
 def multidex_version = '2.0.1'
@@ -57,7 +80,7 @@ def constraint_version = '1.1.3'
 def lifecycle_version = '2.2.0'
 def room_version = '2.2.5'
 def legacySupport_version = '1.0.0'
-def coroutines_version = '1.3.0'
+def coroutines_version = '1.3.7'
 def nav_version = '2.2.2'
 def material_version = '1.1.0'
 def retrofit_version = '2.9.0'
@@ -73,6 +96,9 @@ def antlr_version = '4.7.1'
 def junit_version = '4.12'
 def junitTest_version = '1.2.0'
 def espresso_version = '3.2.0'
+def mockk_version = '1.9.3'
+def livedataTest_version = '1.1.2'
+def okhttp_version = '4.7.2'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -81,6 +107,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
 
+    // Multidex
     implementation "androidx.multidex:multidex:$multidex_version"
 
     // Lifecycle
@@ -124,18 +151,29 @@ dependencies {
     implementation "com.github.ajalt:timberkt:$timberkt_version"
     implementation "org.greenrobot:eventbus:$greenrobot_version"
 
+    // Unit Tests - MockK
+    //noinspection GradleDependency
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test:runner:$junitTest_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    testImplementation "com.jraska.livedata:testing-ktx:$livedataTest_version"
+
+    // Instrumented Tests - MockK
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestImplementation "io.mockk:mockk-android:$mockk_version"
+    androidTestImplementation "androidx.test:runner:$junitTest_version"
+    androidTestUtil "androidx.test:orchestrator:$junitTest_version"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "com.jraska.livedata:testing-ktx:$livedataTest_version"
+
+    // Mock Test Web Server
+    testImplementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
+
 }
 
-//groovy
-configurations.all {
-    resolutionStrategy.force "org.antlr:antlr4-runtime:$antlr_version"
-    resolutionStrategy.force "org.antlr:antlr4-tool:$antlr_version"
-}
-
-//kotlin DSL
 configurations.all {
     resolutionStrategy {
         force("org.antlr:antlr4-runtime:$antlr_version")
