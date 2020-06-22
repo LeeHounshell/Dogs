@@ -175,11 +175,6 @@ class DetailFragment : Fragment() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        Timber.tag(_tag).d("onConfigurationChanged")
-        super.onConfigurationChanged(newConfig)
-    }
-
     private fun setBackgroundColor(url: String) {
         Timber.tag(_tag).d("setBackgroundColor")
         Glide.with(this)

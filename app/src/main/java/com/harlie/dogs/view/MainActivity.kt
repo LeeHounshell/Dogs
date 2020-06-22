@@ -114,17 +114,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        Timber.tag(_tag).d("onConfigurationChanged")
-        super.onConfigurationChanged(newConfig)
-        // Check the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show()
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         Timber.tag(_tag).d("onSupportNavigateUp")
         return NavigationUI.navigateUp(navController, null)
