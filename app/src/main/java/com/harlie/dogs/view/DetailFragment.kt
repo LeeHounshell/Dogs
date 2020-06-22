@@ -175,7 +175,6 @@ class DetailFragment : Fragment() {
         }
     }
 
-    // FIXME: force measure/redraw of the dog_icon image (to fix an Android rotation bug)
     override fun onConfigurationChanged(newConfig: Configuration) {
         Timber.tag(_tag).d("onConfigurationChanged")
         super.onConfigurationChanged(newConfig)
