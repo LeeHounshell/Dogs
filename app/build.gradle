@@ -96,6 +96,7 @@ def antlr_version = '4.7.1'
 def junit_version = '4.12'
 def junitTest_version = '1.2.0'
 def espresso_version = '3.2.0'
+def espressoTestRules_version = '1.2.0'
 def mockk_version = '1.9.3'
 def livedataTest_version = '1.1.2'
 def okhttp_version = '4.7.2'
@@ -159,8 +160,12 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "com.jraska.livedata:testing-ktx:$livedataTest_version"
 
-    // Instrumented Tests - MockK
+    // Instrumented Tests - espresso
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test:rules:$espressoTestRules_version"
+
+    // Instrumented Tests - MockK
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
     androidTestImplementation "androidx.test:runner:$junitTest_version"
