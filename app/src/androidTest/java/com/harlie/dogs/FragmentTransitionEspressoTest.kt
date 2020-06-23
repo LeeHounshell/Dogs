@@ -41,6 +41,7 @@ class FragmentTransitionEspressoTest {
             .perform(RecyclerViewActions.scrollToPosition<DogsListAdapter.DogViewHolder>(position))
             .check(matches(hasDescendant(withText("Akita")))) // position 5
             .perform(RecyclerViewActions.actionOnItemAtPosition<DogsListAdapter.DogViewHolder>(position, click()))
+        slowDownSoWeCanSeeTheUI()
         onView(withId(R.id.dogDetails))
             .check(matches(hasDescendant(withText("Hunting bears"))))
             .check(matches(hasDescendant(withText("10 - 14 years"))))
@@ -57,6 +58,7 @@ class FragmentTransitionEspressoTest {
             .perform(RecyclerViewActions.scrollToPosition<DogsListAdapter.DogViewHolder>(position))
             .check(matches(hasDescendant(withText("Alaskan Husky")))) // position 7
             .perform(RecyclerViewActions.actionOnItemAtPosition<DogsListAdapter.DogViewHolder>(position, click()))
+        slowDownSoWeCanSeeTheUI()
         onView(withId(R.id.dogDetails))
             .check(matches(hasDescendant(withText("Sled pulling"))))
             .check(matches(hasDescendant(withText("10 - 13 years"))))
@@ -74,6 +76,7 @@ class FragmentTransitionEspressoTest {
             .perform(RecyclerViewActions.scrollToPosition<DogsListAdapter.DogViewHolder>(position))
             .check(matches(hasDescendant(withText("Pharaoh Hound"))))
             .perform(RecyclerViewActions.actionOnItemAtPosition<DogsListAdapter.DogViewHolder>(position, click()))
+        slowDownSoWeCanSeeTheUI()
         onView(withId(R.id.dogDetails))
             .check(matches(hasDescendant(withText("Hunting rabbits"))))
             .check(matches(hasDescendant(withText("12 - 14 years"))))
@@ -94,6 +97,7 @@ class FragmentTransitionEspressoTest {
             .perform(RecyclerViewActions.scrollToPosition<DogsListAdapter.DogViewHolder>(position))
             .check(matches(hasDescendant(withText("Yorkshire Terrier")))) // last position
             .perform(RecyclerViewActions.actionOnItemAtPosition<DogsListAdapter.DogViewHolder>(position, click()))
+        slowDownSoWeCanSeeTheUI()
         onView(withId(R.id.dogDetails))
             .check(matches(hasDescendant(withText("Small vermin hunting"))))
             .check(matches(hasDescendant(withText("12 - 16 years"))))

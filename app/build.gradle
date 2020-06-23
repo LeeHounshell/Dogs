@@ -50,7 +50,7 @@ android {
     }
 
     testOptions {
-        //execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
         unitTests {
             includeAndroidResources = true
             unitTests.returnDefaultValues = true
@@ -93,7 +93,7 @@ def preferences_version = '1.1.1'
 def timberkt_version = '1.5.1'
 def greenrobot_version = '3.2.0'
 def antlr_version = '4.7.1'
-def junit_version = '4.12'
+def junit_version = '4.13'
 def junitTest_version = '1.2.0'
 def espresso_version = '3.2.0'
 def espressoTestRules_version = '1.2.0'
@@ -153,7 +153,6 @@ dependencies {
     implementation "org.greenrobot:eventbus:$greenrobot_version"
 
     // Unit Tests - MockK
-    //noinspection GradleDependency
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation "io.mockk:mockk:$mockk_version"
