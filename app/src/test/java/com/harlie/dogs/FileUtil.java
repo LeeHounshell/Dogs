@@ -17,34 +17,29 @@ public class FileUtil {
             Context context = ApplicationProvider.getApplicationContext();
             InputStream in = context.getClassLoader().getResourceAsStream(resource_name);
             if (in != null) {
-                String jsonInfo = convertStreamToString(in);
-                System.out.println(TAG + "loadResource: jsonInfo=" + jsonInfo);
-                return jsonInfo;
+                return convertStreamToString(in);
+            }
+            else {
+                System.out.println(TAG + "*** loadResource: UNABLE TO OPEN RESOURCE FILE: " + resource_name);
             }
         }
         catch (Exception e) {
-            System.err.println(TAG + "*** ERROR: loadResource(" + resource_name + ") e=" + e);
+            System.err.println(TAG + "*** ERROR: loadResource(" + resource_name + ") error=" + e);
         }
         return "";
     }
 
-    public String convertStreamToString(InputStream is) {
-        System.out.println(TAG + "convertStreamToString");
+    private String convertStreamToString(InputStream is) {
         StringBuilder buf = new StringBuilder();
-        if (is != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String str;
-            try {
-                while ((str = reader.readLine()) != null) {
-                    buf.append(str).append("\n");
-                }
-            }
-            catch (IOException e) {
-                System.err.println(TAG + "*** unable to read JSON test data! *** - e=" + e);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String str;
+        try {
+            while ((str = reader.readLine()) != null) {
+                buf.append(str).append("\n");
             }
         }
-        else {
-            System.err.println(TAG + "*** the InputStream is null! ***");
+        catch (IOException e) {
+            System.err.println(TAG + "*** convertStreamToString: unable to read JSON test data! error=" + e);
         }
         return buf.toString();
     }
