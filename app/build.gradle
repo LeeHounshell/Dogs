@@ -100,6 +100,7 @@ def espressoTestRules_version = '1.2.0'
 def mockk_version = '1.9.3'
 def livedataTest_version = '1.1.2'
 def okhttp_version = '4.7.2'
+def robolectric_version = '4.2.1'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -158,6 +159,10 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "com.jraska.livedata:testing-ktx:$livedataTest_version"
+
+    // Unit Tests - Robolectric
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "androidx.test:core:$junitTest_version"
 
     // Instrumented Tests - espresso
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"

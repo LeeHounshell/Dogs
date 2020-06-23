@@ -7,9 +7,14 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.net.HttpURLConnection
 
 // use MockWebServer to verify network responses are converted into correct data structures
+@Config(sdk = intArrayOf(27, 28))
+@RunWith(RobolectricTestRunner::class)
 class TestRetrofitWithMockWebServer {
 
     private var mockWebServer = MockWebServer()
@@ -21,7 +26,10 @@ class TestRetrofitWithMockWebServer {
     @Before
     fun setup() {
         System.out.println("setup")
-        content = fakeReadOfJsonAsset("dog_data.json")
+        content = FileUtil().loadResource("dog_data.json")
+        if (content.length == 0) {
+            content = readFakeJsonAsset("dog_data.json")
+        }
         System.out.println("setup: content=${content}")
         dogsApiService.setRealBaseUrl(mockWebServer.url("/").toString())
     }
@@ -113,7 +121,7 @@ class TestRetrofitWithMockWebServer {
     }
 
     // FIXME: currently unable to read asset files in a unit test with no instrumentation
-    private fun fakeReadOfJsonAsset(asset_file: String): String {
+    private fun readFakeJsonAsset(asset_file: String): String {
         System.out.println("FIXME: simulate reading ${asset_file}")
         return "" +
         "[" +
