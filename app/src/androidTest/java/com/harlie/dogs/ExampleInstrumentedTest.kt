@@ -25,6 +25,7 @@ class ExampleInstrumentedTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val testUtil = TestUtil()
 
     @MockK
     lateinit var mockList: List<String>
@@ -32,7 +33,15 @@ class ExampleInstrumentedTest {
     @Before
     fun setup() {
         System.out.println("setup")
+        testUtil.waitForViewToAppear()
         MockKAnnotations.init(this)
+    }
+
+    @Test
+    fun dummyInstrumentedTest() {
+        System.out.println("dummyInstrumentedTest")
+        every {mockList.size} returns 5
+        assertTrue(mockList.size == 5, "Expect the List size is 5")
     }
 
     @Test
@@ -43,15 +52,9 @@ class ExampleInstrumentedTest {
         assertEquals("com.harlie.dogs", appContext.packageName)
     }
 
-    @Test
-    fun dummyInstrumentedTest() {
-        System.out.println("dummyInstrumentedTest")
-        every {mockList.size} returns 5
-        assertTrue(mockList.size == 5, "Expect the List size is 5")
-    }
-
     @After
     fun teardown() {
         System.out.println("teardown")
+        testUtil.slowDownSoWeCanSeeTheUI()
     }
 }

@@ -1,10 +1,8 @@
 package com.harlie.dogs
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import androidx.test.rule.ActivityTestRule
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApi
 import com.harlie.dogs.model.DogsApiService
@@ -12,7 +10,6 @@ import com.harlie.dogs.model.DogsApiService.Companion.BASE_URL
 import com.harlie.dogs.repository.DogsListDataRepository
 import com.harlie.dogs.util.SharedPreferencesHelper
 import com.harlie.dogs.util.postDefault
-import com.harlie.dogs.view.MainActivity
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -22,15 +19,14 @@ import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class DogsListViewModelTest {
 
-    @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val testUtil = TestUtil()
+    val dummyData = MutableLiveData<List<DogBreed>>().postDefault(testUtil.createTestDogs(3))
 
     @MockK
     lateinit var apiService: DogsApiService
@@ -41,13 +37,17 @@ class DogsListViewModelTest {
 
     lateinit var viewModel: DogsListViewModel
     lateinit var dogsListDataRepository: DogsListDataRepository
-    lateinit var dummyData: LiveData<List<DogBreed>>
 
     @Before
     fun setup() {
         System.out.println("setup")
-        dummyData = MutableLiveData<List<DogBreed>>().postDefault(TestUtil().createTestDogs(3))
         MockKAnnotations.init(this)
+    }
+
+    @Test
+    fun test_That_LiveData_Takes_on_Values_from_Repository() {
+        System.out.println("test_That_LiveData_Takes_on_Values_from_Repository")
+
         every { apiService.getRequestApi() } returns dummyApi
         every { apiService.setRealBaseUrl(any()) } returns Unit
         every { prefHelper.isDatabaseCreated() } returns false
@@ -55,16 +55,15 @@ class DogsListViewModelTest {
         every { prefHelper.saveUpdateTime(any()) } returns Unit
         every { prefHelper.getCacheDuration() } returns "600"
         every { prefHelper.getUpdateTime() } returns 0
+
         dogsListDataRepository = spyk(DogsListDataRepository(BASE_URL, apiService, prefHelper))
+
         coEvery { dogsListDataRepository.fetchFromDatabase(any()) } returns dummyData
         coEvery { dogsListDataRepository.fetchFromRemote() } returns dummyData
         coEvery { dogsListDataRepository.storeDogsLocally(any()) } returns Unit
-        viewModel = DogsListViewModel(dogsListDataRepository)
-    }
 
-    @Test
-    fun test_That_LiveData_Takes_on_values_from_Repository() {
-        System.out.println("test_That_LiveData_Takes_on_values_from_Repository")
+        viewModel = DogsListViewModel(dogsListDataRepository)
+
         runBlocking {
             UiThreadStatement.runOnUiThread {
                 viewModel.dogsList.observeForever {
@@ -102,5 +101,6 @@ class DogsListViewModelTest {
     @After
     fun teardown() {
         System.out.println("teardown")
+        testUtil.slowDownSoWeCanSeeTheUI()
     }
 }

@@ -23,6 +23,8 @@ import kotlin.test.assertEquals
 @RunWith(AndroidJUnit4ClassRunner::class)
 class TestMockNetworkControl {
 
+    val testUtil = TestUtil()
+
     @RelaxedMockK
     lateinit var context: Context
     @MockK
@@ -43,12 +45,14 @@ class TestMockNetworkControl {
     @Test
     fun enableNetwork_then_TestNetwork_is_Enabled() {
         System.out.println("enableNetwork_then_TestNetwork_is_Enabled")
+        testUtil.slowDownSoWeCanSeeTheUI()
         enableNetworkAndVerifyNetworkIsEnabled(context)
     }
 
     @Test
     fun disableNetwork_then_TestNetwork_is_Disabled() {
         System.out.println("disableNetwork_then_TestNetwork_is_Disabled")
+        testUtil.slowDownSoWeCanSeeTheUI()
         disableNetworkAndVerifyNetworkIsDisabled(context)
     }
 
@@ -99,5 +103,6 @@ class TestMockNetworkControl {
     @After
     fun teardown() {
         System.out.println("teardown")
+        testUtil.slowDownSoWeCanSeeTheUI()
     }
 }

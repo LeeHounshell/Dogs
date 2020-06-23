@@ -23,12 +23,15 @@ class TestRoomDatabase {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val testUtil = TestUtil()
 
     private lateinit var db: DogDatabase
 
     @Before
     fun createDb() {
         System.out.println("createDb")
+        testUtil.waitForViewToAppear()
+
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, DogDatabase::class.java)
             .allowMainThreadQueries().build()
