@@ -2,12 +2,15 @@ package com.harlie.dogs
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
+import com.harlie.dogs.view.MainActivity
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertTrue
@@ -19,6 +22,9 @@ import kotlin.test.assertTrue
  */
 @RunWith(AndroidJUnit4ClassRunner::class)
 class ExampleInstrumentedTest {
+
+    @get:Rule
+    var activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @MockK
     lateinit var mockList: List<String>

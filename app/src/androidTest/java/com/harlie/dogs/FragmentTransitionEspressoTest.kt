@@ -20,7 +20,8 @@ import org.junit.runner.RunWith
 @LargeTest
 class FragmentTransitionEspressoTest {
 
-    @get:Rule var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    @get:Rule
+    var activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @Before
     fun setup() {

@@ -4,19 +4,26 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.room.DogDatabase
+import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class TestRoomDatabase {
+
+    @get:Rule
+    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+
     private lateinit var db: DogDatabase
 
     @Before
