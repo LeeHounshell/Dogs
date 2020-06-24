@@ -28,6 +28,8 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
         MutableLiveData<Boolean>()
     }
 
+    var lastClickedDogListIndex = 0
+
     init {
         Timber.tag(_tag).d("init")
         dogsRepository = repository

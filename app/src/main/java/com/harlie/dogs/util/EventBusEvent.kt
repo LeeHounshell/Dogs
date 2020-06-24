@@ -18,6 +18,7 @@ open class EventBusEvent(open val description: String) {
 
 }
 
+class DogClickedEvent(override val description: String, val clickIndex: Int): EventBusEvent(description)
 class RoomLoadedEvent(override val description: String, val dogsList: List<DogBreed>): EventBusEvent(description)
 class RoomErrorEvent(override val description: String): EventBusEvent(description)
 class RxErrorEvent(override val description: String): EventBusEvent(description)

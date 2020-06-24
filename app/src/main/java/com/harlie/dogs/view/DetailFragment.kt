@@ -2,7 +2,6 @@ package com.harlie.dogs.view
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle

@@ -13,10 +13,7 @@ import com.harlie.dogs.R
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.repository.DogsListDataRepository
-import com.harlie.dogs.util.RoomLoadedEvent
-import com.harlie.dogs.util.SharedPreferencesHelper
-import com.harlie.dogs.util.isNetworkAvailable
-import com.harlie.dogs.util.navigateSafe
+import com.harlie.dogs.util.*
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -115,6 +112,7 @@ class ListFragment : Fragment() {
             // set adapter data as current dogs list
             dogListAdapter.updateDogList(currentDogs)
             dogsList.visibility = View.VISIBLE
+            dogsList.layoutManager?.scrollToPosition(dogListViewModel.lastClickedDogListIndex)
         }
     }
 
@@ -170,6 +168,12 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("onStop")
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDogClickedEvent(dogClicked_event: DogClickedEvent) {
+        Timber.tag(_tag).d("-onDogClickedEvent- ${dogClicked_event.description} clickIndex=${dogClicked_event.clickIndex} <===")
+        dogListViewModel.lastClickedDogListIndex = dogClicked_event.clickIndex
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

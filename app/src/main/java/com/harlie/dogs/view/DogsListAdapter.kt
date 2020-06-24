@@ -10,6 +10,7 @@ import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.databinding.ItemDogsBinding
 import com.harlie.dogs.model.DogBreed
+import com.harlie.dogs.util.DogClickedEvent
 import com.harlie.dogs.util.NavigationErrorEvent
 import kotlinx.android.synthetic.main.item_dogs.view.*
 
@@ -45,8 +46,12 @@ class DogsListAdapter(private val dogsList: ArrayList<DogBreed>)
 
     override fun onDogClicked(view: View) {
         val uuid = view.dogId.text.toString().toInt()
-        Timber.tag(_tag).d("-CLICK- uuid=${uuid}")
+        val recyclerView = view.parent as RecyclerView
+        val position = recyclerView.getChildAdapterPosition(view)
+        Timber.tag(_tag).d("-CLICK- uuid=${uuid} position=${position}")
         try {
+            val dogClickedEvent = DogClickedEvent(view.dogName.text.toString(), position)
+            dogClickedEvent.post()
             val action = ListFragmentDirections.actionListFragmentToDetailFragment()
             action.dogUuid = uuid
             view.findNavController().navigate(action)
