@@ -19,6 +19,10 @@ class MyApplication : MultiDexApplication() {
         }
     }
 
+    fun getInstance(): MyApplication? {
+        return Companion.instance
+    }
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
