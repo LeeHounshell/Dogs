@@ -21,10 +21,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
@@ -33,9 +30,8 @@ class DogsListViewModelTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
-    val testUtil = TestUtil()
 
-    val dummyData = MutableLiveData<List<DogBreed>>().postDefault(testUtil.createTestDogs(3))
+    val dummyData = MutableLiveData<List<DogBreed>>().postDefault(TestUtil().createTestDogs(3))
 
     @MockK
     lateinit var apiService: DogsApiService
@@ -47,11 +43,24 @@ class DogsListViewModelTest {
     lateinit var viewModel: DogsListViewModel
     lateinit var dogsListDataRepository: DogsListDataRepository
 
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun preInitialization() {
+            System.out.println("preInitialization")
+            GlideWrapper.isUnitTest = true
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun allTestsComplete() {
+            System.out.println("allTestsComplete")
+        }
+    }
+
     @Before
     fun setup() {
         System.out.println("setup")
-        GlideWrapper.isUnitTest = true
-        testUtil.waitForViewToAppear()
         MockKAnnotations.init(this)
     }
 
@@ -112,6 +121,5 @@ class DogsListViewModelTest {
     @After
     fun teardown() {
         System.out.println("teardown")
-        testUtil.slowDownSoWeCanSeeTheUI()
     }
 }

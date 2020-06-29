@@ -1,9 +1,6 @@
 package com.harlie.dogs
 
-import androidx.test.espresso.matcher.ViewMatchers
 import com.harlie.dogs.model.DogBreed
-import org.hamcrest.CoreMatchers
-import org.junit.Assert
 
 class TestUtil {
 
@@ -17,25 +14,6 @@ class TestUtil {
             ++i
         }
         return dogsList
-    }
-
-    fun waitForViewToAppear() {
-        System.out.println("waitForViewToAppear")
-        Assert.assertTrue(
-            ViewSynchronizer.viewExists(
-                CoreMatchers.allOf(
-                    ViewMatchers.withId(R.id.dogsList), ViewMatchers.withEffectiveVisibility(
-                        ViewMatchers.Visibility.VISIBLE
-                    )
-                ), 10000
-            )
-        );
-        slowDownSoWeCanSeeTheUI()
-    }
-
-    fun slowDownSoWeCanSeeTheUI() {
-        System.out.println("slowDownSoWeCanSeeTheUI")
-        Thread.sleep(5000)
     }
 
 }

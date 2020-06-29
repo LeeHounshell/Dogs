@@ -12,11 +12,8 @@ import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsEqual.equalTo
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
@@ -26,16 +23,27 @@ class TestRoomDatabase {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
-    val testUtil = TestUtil()
 
     private lateinit var db: DogDatabase
+
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun preInitialization() {
+            System.out.println("preInitialization")
+            GlideWrapper.isUnitTest = true
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun allTestsComplete() {
+            System.out.println("allTestsComplete")
+        }
+    }
 
     @Before
     fun createDb() {
         System.out.println("createDb")
-        GlideWrapper.isUnitTest = true
-        testUtil.waitForViewToAppear()
-
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, DogDatabase::class.java)
             .allowMainThreadQueries().build()

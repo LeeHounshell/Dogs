@@ -8,11 +8,8 @@ import com.harlie.dogs.view.MainActivity
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertTrue
 
@@ -27,15 +24,28 @@ class ExampleInstrumentedTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
-    val testUtil = TestUtil()
 
     @MockK
     lateinit var mockList: List<String>
 
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun preInitialization() {
+            System.out.println("preInitialization")
+            GlideWrapper.isUnitTest = true
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun allTestsComplete() {
+            System.out.println("allTestsComplete")
+        }
+    }
+
     @Before
     fun setup() {
         System.out.println("setup")
-        GlideWrapper.isUnitTest = true
         MockKAnnotations.init(this)
     }
 
@@ -57,6 +67,5 @@ class ExampleInstrumentedTest {
     @After
     fun teardown() {
         System.out.println("teardown")
-        testUtil.slowDownSoWeCanSeeTheUI()
     }
 }
