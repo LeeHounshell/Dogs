@@ -16,10 +16,12 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         // The following argument makes the Android Test Orchestrator run its
         // "pm clear" command after each test invocation. This command ensures
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -50,7 +52,8 @@ android {
     }
 
     testOptions {
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+// FIXME: Test framework quit unexpectedly
+//      execution 'ANDROIDX_TEST_ORCHESTRATOR'
         unitTests {
             includeAndroidResources = true
             unitTests.returnDefaultValues = true
@@ -173,14 +176,15 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
     androidTestImplementation "androidx.test:runner:$junitTest_version"
-    androidTestUtil "androidx.test:orchestrator:$junitTest_version"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     androidTestImplementation "com.jraska.livedata:testing-ktx:$livedataTest_version"
+
+// FIXME: Test framework quit unexpectedly
+//  androidTestUtil "androidx.test:orchestrator:$junitTest_version"
 
     // Mock Test Web Server
     testImplementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
-
 }
 
 configurations.all {
