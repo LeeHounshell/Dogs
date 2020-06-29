@@ -2,22 +2,16 @@ package com.harlie.dogs.viewmodel
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.telephony.SmsManager
-import androidx.annotation.Nullable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.MyApplication
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.SmsInfo
 import com.harlie.dogs.repository.DogDetailDataRepository
-import com.harlie.dogs.util.NotificationsHelper
+import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.util.RoomErrorEvent
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.launch
@@ -52,7 +46,7 @@ class DogDetailViewModel(val repository: DogDetailDataRepository): MyViewModel()
                     dogMutableDetail.postValue(dog)
                     if (!isDeepLink) {
                         // create and run a Notification
-                        sendNotificationWithDogImage(dog, dog.breedImageUrl)
+                        GlideWrapper().sendNotificationWithDogImage(dog, dog.breedImageUrl)
                     }
                 }
                 else {
@@ -62,25 +56,6 @@ class DogDetailViewModel(val repository: DogDetailDataRepository): MyViewModel()
                 }
             }
         }
-    }
-
-    // Load bitmap from image url on background thread and display image notification
-    private fun sendNotificationWithDogImage(dog: DogBreed, imageUrl: String?) {
-        Timber.tag(_tag).d("sendNotificationWithDogImage")
-        val bitmap = arrayOf<Bitmap?>(null)
-        Glide.with(MyApplication.applicationContext())
-            .asBitmap()
-            .load(imageUrl)
-            .into(object : CustomTarget<Bitmap?>() {
-                override fun onResourceReady(
-                    resource: Bitmap,
-                    transition: Transition<in Bitmap?>?
-                ) {
-                    bitmap[0] = resource
-                    NotificationsHelper(MyApplication.applicationContext()).createNotification(dog, bitmap[0])
-                }
-                override fun onLoadCleared(@Nullable placeholder: Drawable?) {}
-            })
     }
 
     // Initiate a Database API call to get the DogBreed

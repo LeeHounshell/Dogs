@@ -2,8 +2,6 @@ package com.harlie.dogs.view
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -11,19 +9,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.palette.graphics.Palette
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.github.ajalt.timberkt.Timber
 import com.harlie.dogs.R
 import com.harlie.dogs.databinding.FragmentDetailBinding
 import com.harlie.dogs.databinding.SendSmsDialogBinding
 import com.harlie.dogs.model.DogBreed
-import com.harlie.dogs.model.DogPalette
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.model.SmsInfo
 import com.harlie.dogs.repository.DogDetailDataRepository
+import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.util.SharedPreferencesHelper
 import com.harlie.dogs.viewmodel.DogDetailViewModel
 import com.harlie.dogs.viewmodel.MyViewModelFactory
@@ -84,7 +78,7 @@ class DetailFragment : Fragment() {
                 Timber.tag(_tag).d("observeViewModel: observe dog_icon dog_icon=${dog}")
                 dataBinding.dog = dog
                 dog.breedImageUrl?.let {
-                    setBackgroundColor(it)
+                    GlideWrapper().setBackgroundColor(this, dataBinding, it)
                 }
             }
             else {
@@ -172,26 +166,6 @@ class DetailFragment : Fragment() {
         uiScope.launch(Dispatchers.IO) {
             dogDetailViewModel.sendSms(smsInfo)
         }
-    }
-
-    private fun setBackgroundColor(url: String) {
-        Timber.tag(_tag).d("setBackgroundColor")
-        Glide.with(this)
-            .asBitmap()
-            .load(url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    Palette.from(resource)
-                        .generate { palette ->
-                            val intColor = palette?.vibrantSwatch?.rgb ?: 0
-                            val myPalette = DogPalette(intColor)
-                            dataBinding.palette = myPalette
-                        }
-                }
-            })
     }
 
 }

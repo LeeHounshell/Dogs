@@ -10,6 +10,7 @@ import com.harlie.dogs.model.DogsApi
 import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.model.DogsApiService.Companion.BASE_URL
 import com.harlie.dogs.repository.DogsListDataRepository
+import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.util.SharedPreferencesHelper
 import com.harlie.dogs.util.postDefault
 import com.harlie.dogs.view.MainActivity
@@ -49,6 +50,7 @@ class DogsListViewModelTest {
     @Before
     fun setup() {
         System.out.println("setup")
+        GlideWrapper.isUnitTest = true
         testUtil.waitForViewToAppear()
         MockKAnnotations.init(this)
     }

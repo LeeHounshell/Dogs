@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.room.DogDatabase
+import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsEqual.equalTo
@@ -32,6 +33,7 @@ class TestRoomDatabase {
     @Before
     fun createDb() {
         System.out.println("createDb")
+        GlideWrapper.isUnitTest = true
         testUtil.waitForViewToAppear()
 
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

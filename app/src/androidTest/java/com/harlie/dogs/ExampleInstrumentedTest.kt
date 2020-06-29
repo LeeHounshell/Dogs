@@ -3,6 +3,7 @@ package com.harlie.dogs
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
+import com.harlie.dogs.util.GlideWrapper
 import com.harlie.dogs.view.MainActivity
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -34,6 +35,7 @@ class ExampleInstrumentedTest {
     @Before
     fun setup() {
         System.out.println("setup")
+        GlideWrapper.isUnitTest = true
         MockKAnnotations.init(this)
     }
 
