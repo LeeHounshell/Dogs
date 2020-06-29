@@ -88,12 +88,12 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
         val updateTime = dogsRepository.prefHelper.getUpdateTime()
         Timber.tag(_tag).d("refresh: updateTime=${updateTime}")
         if (((updateTime != 0L) && ((System.nanoTime() - updateTime) < refreshTime))
-            || ! isNetworkAvailable(context))
+            || ! isNetworkAvailable())
         {
             Timber.tag(_tag).d("refresh: fetch data from DATABASE")
             databaseRefresh(context)
         }
-        else if (isNetworkAvailable(context)){
+        else if (isNetworkAvailable()){
             Timber.tag(_tag).d("refresh: fetch data from NETWORK")
             networkRefresh()
         }
@@ -157,7 +157,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     fun checkIfLoadingIsComplete() {
         Timber.tag(_tag).d("checkIfLoadingIsComplete")
         if (! didNetworkRefresh) {
-            if (isNetworkAvailable(MyApplication.applicationContext())) {
+            if (isNetworkAvailable()) {
                 viewModelScope.launch {
                     dogsRepository.prefHelper.saveUpdateTime(0L)
                     refresh()

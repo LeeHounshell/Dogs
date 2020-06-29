@@ -120,7 +120,7 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("refresh")
         Timer("refresh", false).schedule(500) {
             uiScope.launch(Dispatchers.IO) {
-                if (haveUuids && currentDogs.size > 0 && ! isNetworkAvailable(context)) {
+                if (haveUuids && currentDogs.size > 0 && ! isNetworkAvailable()) {
                     Timber.tag(_tag).d("refresh: NO NETWORK, SHOW EXISTING DATA")
                 }
                 else {
@@ -180,7 +180,7 @@ class ListFragment : Fragment() {
     fun onRoomLoadedEvent(roomLoaded_event: RoomLoadedEvent) {
         Timber.tag(_tag).d("DATABASE INITIALIZED ===> onRoomLoadedEvent: size=${roomLoaded_event.dogsList.size} <===")
         databaseInitialized = true
-        if ( ! isNetworkAvailable(context)) {
+        if ( ! isNetworkAvailable()) {
             dogListViewModel.setDogsList(roomLoaded_event.dogsList)
         }
     }

@@ -12,6 +12,7 @@ import androidx.navigation.NavDirections
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.github.ajalt.timberkt.Timber
 import com.google.gson.Gson
+import com.harlie.dogs.MyApplication
 import com.harlie.dogs.room.DogDatabase
 import org.json.JSONArray
 import java.io.InputStream
@@ -50,15 +51,12 @@ fun NavController.navigateSafe(direction: NavDirections) {
 }
 
 @Suppress("DEPRECATION")
-fun isNetworkAvailable(context: Context?): Boolean {
+fun isNetworkAvailable(): Boolean {
     if (GlideWrapper.isUnitTest) {
         Timber.tag(_tag).d("isNetworkAvailable false (TESTING)")
         return false
     }
-    if (context == null) {
-        Timber.tag(_tag).d("isNetworkAvailable false (NO CONTEXT)")
-        return false
-    }
+    val context = MyApplication.applicationContext()
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
