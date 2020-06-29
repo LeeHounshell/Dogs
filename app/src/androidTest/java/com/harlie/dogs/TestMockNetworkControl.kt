@@ -6,12 +6,13 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
+import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.harlie.dogs.util.isNetworkAvailable
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.spyk
 import io.mockk.verify
 import org.junit.After
 import org.junit.Before
@@ -21,14 +22,14 @@ import kotlin.test.assertEquals
 
 @Suppress("DEPRECATION")
 @RunWith(AndroidJUnit4ClassRunner::class)
+@LargeTest
 class TestMockNetworkControl {
 
     val testUtil = TestUtil()
 
-    @RelaxedMockK
     lateinit var context: Context
-    @MockK
     lateinit var connectivityManagerMock: ConnectivityManager
+
     @MockK
     lateinit var networkMock: Network
     @MockK
@@ -39,20 +40,22 @@ class TestMockNetworkControl {
     @Before
     fun setup() {
         System.out.println("setup")
+        testUtil.slowDownSoWeCanSeeTheUI()
+        context = spyk(MyApplication.applicationContext())
+        val service = Context.CONNECTIVITY_SERVICE
+        connectivityManagerMock = spyk(context.getSystemService(service) as ConnectivityManager)
         MockKAnnotations.init(this)
     }
 
     @Test
     fun enableNetwork_then_TestNetwork_is_Enabled() {
         System.out.println("enableNetwork_then_TestNetwork_is_Enabled")
-        testUtil.slowDownSoWeCanSeeTheUI()
         enableNetworkAndVerifyNetworkIsEnabled(context)
     }
 
     @Test
     fun disableNetwork_then_TestNetwork_is_Disabled() {
         System.out.println("disableNetwork_then_TestNetwork_is_Disabled")
-        testUtil.slowDownSoWeCanSeeTheUI()
         disableNetworkAndVerifyNetworkIsDisabled(context)
     }
 

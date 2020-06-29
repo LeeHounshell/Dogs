@@ -1,7 +1,7 @@
 package com.harlie.dogs
 
+import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.harlie.dogs.view.MainActivity
 import io.mockk.MockKAnnotations
@@ -21,6 +21,7 @@ import kotlin.test.assertTrue
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4ClassRunner::class)
+@LargeTest
 class ExampleInstrumentedTest {
 
     @get:Rule
@@ -33,7 +34,6 @@ class ExampleInstrumentedTest {
     @Before
     fun setup() {
         System.out.println("setup")
-        testUtil.waitForViewToAppear()
         MockKAnnotations.init(this)
     }
 
@@ -45,11 +45,11 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun useAppContext() {
+    fun testThatContextIsForDogsPackage() {
         // test Context of the app under test.
-        System.out.println("useAppContext")
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.harlie.dogs", appContext.packageName)
+        System.out.println("testThatContextIsForDogsPackage")
+        val context = MyApplication.applicationContext()
+        assertEquals("com.harlie.dogs", context.packageName)
     }
 
     @After

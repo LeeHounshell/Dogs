@@ -2,6 +2,7 @@ package com.harlie.dogs
 
 import android.content.Context
 import androidx.room.Room
+import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4ClassRunner::class)
+@LargeTest
 class TestRoomDatabase {
 
     @get:Rule

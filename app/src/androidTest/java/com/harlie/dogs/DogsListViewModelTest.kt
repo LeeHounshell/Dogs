@@ -1,8 +1,10 @@
 package com.harlie.dogs
 
 import androidx.lifecycle.MutableLiveData
+import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+import androidx.test.rule.ActivityTestRule
 import com.harlie.dogs.model.DogBreed
 import com.harlie.dogs.model.DogsApi
 import com.harlie.dogs.model.DogsApiService
@@ -10,6 +12,7 @@ import com.harlie.dogs.model.DogsApiService.Companion.BASE_URL
 import com.harlie.dogs.repository.DogsListDataRepository
 import com.harlie.dogs.util.SharedPreferencesHelper
 import com.harlie.dogs.util.postDefault
+import com.harlie.dogs.view.MainActivity
 import com.harlie.dogs.viewmodel.DogsListViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -19,13 +22,18 @@ import io.mockk.spyk
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
+@LargeTest
 class DogsListViewModelTest {
 
+    @get:Rule
+    var activityTestRule = ActivityTestRule(MainActivity::class.java)
     val testUtil = TestUtil()
+
     val dummyData = MutableLiveData<List<DogBreed>>().postDefault(testUtil.createTestDogs(3))
 
     @MockK
@@ -41,6 +49,7 @@ class DogsListViewModelTest {
     @Before
     fun setup() {
         System.out.println("setup")
+        testUtil.waitForViewToAppear()
         MockKAnnotations.init(this)
     }
 
