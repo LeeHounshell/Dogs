@@ -51,7 +51,14 @@ fun NavController.navigateSafe(direction: NavDirections) {
 
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(context: Context?): Boolean {
-    if (context == null) return false
+    if (GlideWrapper.isUnitTest) {
+        Timber.tag(_tag).d("isNetworkAvailable false (TESTING)")
+        return false
+    }
+    if (context == null) {
+        Timber.tag(_tag).d("isNetworkAvailable false (NO CONTEXT)")
+        return false
+    }
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
