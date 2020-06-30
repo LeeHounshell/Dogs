@@ -29,7 +29,7 @@ import org.junit.runner.RunWith
 class DogsListViewModelTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     val dummyData = MutableLiveData<List<DogBreed>>().postDefault(TestUtil().createTestDogs(3))
 

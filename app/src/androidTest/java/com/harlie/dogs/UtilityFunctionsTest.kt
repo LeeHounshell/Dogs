@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 class UtilityFunctionsTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     companion object {
         @BeforeClass

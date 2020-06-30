@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 class FragmentTransitionEspressoTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     companion object {
         @BeforeClass
@@ -40,6 +40,7 @@ class FragmentTransitionEspressoTest {
     @Before
     fun setup() {
         println("setup")
+        Thread.sleep(5000) // we need a little time for the view to display
     }
 
     @Test

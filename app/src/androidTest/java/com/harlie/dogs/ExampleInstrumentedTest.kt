@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 class ExampleInstrumentedTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @MockK
     lateinit var mockList: List<String>

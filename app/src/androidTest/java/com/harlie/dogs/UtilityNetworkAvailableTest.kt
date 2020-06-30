@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 class UtilityNetworkAvailableTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     companion object {
         @BeforeClass

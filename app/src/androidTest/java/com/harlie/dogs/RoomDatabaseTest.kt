@@ -22,7 +22,7 @@ import java.io.IOException
 class RoomDatabaseTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     private lateinit var db: DogDatabase
 
