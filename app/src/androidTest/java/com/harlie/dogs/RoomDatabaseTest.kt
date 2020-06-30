@@ -19,7 +19,7 @@ import java.io.IOException
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 @LargeTest
-class TestRoomDatabase {
+class RoomDatabaseTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(MainActivity::class.java)
