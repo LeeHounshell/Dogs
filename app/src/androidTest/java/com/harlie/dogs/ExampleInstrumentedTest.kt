@@ -32,26 +32,26 @@ class ExampleInstrumentedTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
         MockKAnnotations.init(this)
     }
 
     @Test
     fun dummyInstrumentedTest() {
-        System.out.println("dummyInstrumentedTest")
+        println("dummyInstrumentedTest")
         every {mockList.size} returns 5
         assertTrue(mockList.size == 5, "Expect the List size is 5")
     }
@@ -59,13 +59,13 @@ class ExampleInstrumentedTest {
     @Test
     fun testThatContextIsForDogsPackage() {
         // test Context of the app under test.
-        System.out.println("testThatContextIsForDogsPackage")
+        println("testThatContextIsForDogsPackage")
         val context = MyApplication.applicationContext()
         assertEquals("com.harlie.dogs", context.packageName)
     }
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
     }
 }

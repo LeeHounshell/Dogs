@@ -22,25 +22,25 @@ class UtilityNetworkAvailableTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
     }
 
     @Test
     fun enableNetwork_then_TestNetwork_is_Enabled() {
-        System.out.println("enableNetwork_then_TestNetwork_is_Enabled")
+        println("enableNetwork_then_TestNetwork_is_Enabled")
         GlideWrapper.isUnitTest = false
         mockkStatic("com.harlie.dogs.util.UtilityFunctionsKt") to {
             every { isNetworkAvailable() } returns true
@@ -50,7 +50,7 @@ class UtilityNetworkAvailableTest {
 
     @Test
     fun disableNetwork_then_TestNetwork_is_Disabled() {
-        System.out.println("disableNetwork_then_TestNetwork_is_Disabled")
+        println("disableNetwork_then_TestNetwork_is_Disabled")
         GlideWrapper.isUnitTest = false
         mockkStatic("com.harlie.dogs.util.UtilityFunctionsKt") to {
             every { isNetworkAvailable() } returns false
@@ -60,7 +60,7 @@ class UtilityNetworkAvailableTest {
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
         GlideWrapper.isUnitTest = true
     }
 }

@@ -22,20 +22,20 @@ class UtilityFunctionsTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
     }
 
     @Test
@@ -108,7 +108,6 @@ class UtilityFunctionsTest {
 
     @After
     fun teardown() {
-        System.out.println("teardown")
-        GlideWrapper.isUnitTest = true
+        println("teardown")
     }
 }

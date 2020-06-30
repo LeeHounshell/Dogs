@@ -47,26 +47,26 @@ class DogsListViewModelTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
         MockKAnnotations.init(this)
     }
 
     @Test
     fun test_That_LiveData_Takes_on_Values_from_Repository() {
-        System.out.println("test_That_LiveData_Takes_on_Values_from_Repository")
+        println("test_That_LiveData_Takes_on_Values_from_Repository")
 
         every { apiService.getRequestApi() } returns dummyApi
         every { apiService.setRealBaseUrl(any()) } returns Unit
@@ -87,7 +87,7 @@ class DogsListViewModelTest {
         runBlocking {
             UiThreadStatement.runOnUiThread {
                 viewModel.dogsList.observeForever {
-                    System.out.println("*** viewModel.dogsList.size=${viewModel.dogsList.value?.size}")
+                    println("*** viewModel.dogsList.size=${viewModel.dogsList.value?.size}")
                     assert(it.size == 3)
                     val dog1 = it[0]
                     assert(dog1.breedId == "1")
@@ -120,6 +120,6 @@ class DogsListViewModelTest {
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
     }
 }

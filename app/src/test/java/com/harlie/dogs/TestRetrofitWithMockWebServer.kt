@@ -26,15 +26,15 @@ class TestRetrofitWithMockWebServer {
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
         content = FileUtil().loadResource(dogDataJson)
-        //System.out.println("setup: content=${content}")
+        //println("setup: content=${content}")
         dogsApiService.setRealBaseUrl(mockWebServer.url("/").toString())
     }
 
     @Test
     fun testRetrofitAPI() {
-        System.out.println("testRetrofitAPI")
+        println("testRetrofitAPI")
 
         val response = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -42,9 +42,9 @@ class TestRetrofitWithMockWebServer {
 
         mockWebServer.enqueue(response)
 
-        System.out.println("response=${response.status}")
+        println("response=${response.status}")
         assert(response.status == "HTTP/1.1 200 OK")
-        System.out.println("response body=${response.getBody()}")
+        println("response body=${response.getBody()}")
 
         val dogsListFlowable = dogsApiService.getRequestApi().getFlowableDogs()
         dogsListFlowable
@@ -55,7 +55,7 @@ class TestRetrofitWithMockWebServer {
     }
 
     private fun validateItems(it: List<DogBreed>?) {
-        System.out.println("validateItems")
+        println("validateItems")
         it?.forEach {
             when (++dogsCount) {
                 1 -> {
@@ -114,7 +114,7 @@ class TestRetrofitWithMockWebServer {
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
         mockWebServer.shutdown()
     }
 

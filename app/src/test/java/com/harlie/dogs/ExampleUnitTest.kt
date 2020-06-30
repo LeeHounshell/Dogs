@@ -21,7 +21,7 @@ class ExampleUnitTest {
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
         MockKAnnotations.init(this)
     }
 
@@ -32,13 +32,13 @@ class ExampleUnitTest {
 
     @Test
     fun dummyUnitTest() {
-        System.out.println("dummyUnitTest")
+        println("dummyUnitTest")
         every {mockList.size} returns 5
         assertTrue(mockList.size == 5, "Expect the List size is 5")
     }
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
     }
 }

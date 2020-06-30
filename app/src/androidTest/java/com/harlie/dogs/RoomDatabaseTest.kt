@@ -30,20 +30,20 @@ class RoomDatabaseTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun createDb() {
-        System.out.println("createDb")
+        println("createDb")
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, DogDatabase::class.java)
             .allowMainThreadQueries().build()
@@ -52,17 +52,17 @@ class RoomDatabaseTest {
     @After
     @Throws(IOException::class)
     fun closeDb() {
-        System.out.println("closeDb")
+        println("closeDb")
         db.close()
     }
 
     @Test
     @Throws(Exception::class)
     fun writeOneDogThenReadOneDog() {
-        System.out.println("writeOneDogThenReadOneDog")
+        println("writeOneDogThenReadOneDog")
         val dogList: List<DogBreed> = TestUtil().createTestDogs(3)
         dogList.forEach {dog ->
-            System.out.println("dog: ${dog}")
+            println("dog: ${dog}")
             runBlocking {
                 db.dogDao().insertAll(dog) // inserts one dog
                 val byId = db.dogDao().getDog(dog.uuid)
@@ -74,7 +74,7 @@ class RoomDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertDogsListThenReplaceAll() {
-        System.out.println("insertDogsListThenReplaceAll")
+        println("insertDogsListThenReplaceAll")
         val dogList: List<DogBreed> = TestUtil().createTestDogs(3)
         val dogReplaceList: List<DogBreed> = TestUtil().createTestDogs(5)
         val dao = db.dogDao()

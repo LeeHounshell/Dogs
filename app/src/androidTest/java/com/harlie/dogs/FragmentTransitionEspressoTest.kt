@@ -26,25 +26,25 @@ class FragmentTransitionEspressoTest {
         @BeforeClass
         @JvmStatic
         fun preInitialization() {
-            System.out.println("preInitialization")
+            println("preInitialization")
             GlideWrapper.isUnitTest = true
         }
 
         @AfterClass
         @JvmStatic
         fun allTestsComplete() {
-            System.out.println("allTestsComplete")
+            println("allTestsComplete")
         }
     }
 
     @Before
     fun setup() {
-        System.out.println("setup")
+        println("setup")
     }
 
     @Test
     fun checkAndClickListItems() {
-        System.out.println("checkAndClickListItems")
+        println("checkAndClickListItems")
 
         var position = 5
         onView(withId(R.id.dogsList))
@@ -101,7 +101,6 @@ class FragmentTransitionEspressoTest {
         val recyclerView: RecyclerView = activityTestRule.getActivity().findViewById(R.id.dogsList)
         val itemCount = recyclerView.adapter!!.itemCount
         position = if (itemCount > 0) itemCount - 1 else 0
-        System.out.println("last position=${position}")
 
         onView(withId(R.id.dogsList))
             .perform(RecyclerViewActions.scrollToPosition<DogsListAdapter.DogViewHolder>(position))
@@ -121,7 +120,7 @@ class FragmentTransitionEspressoTest {
 
     @After
     fun teardown() {
-        System.out.println("teardown")
+        println("teardown")
     }
 
 }
