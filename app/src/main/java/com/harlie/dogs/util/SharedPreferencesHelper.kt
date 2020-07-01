@@ -7,7 +7,7 @@ import com.harlie.dogs.MyApplication
 class SharedPreferencesHelper {
 
     val context = MyApplication.applicationContext()
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)!!
 
     companion object {
         private const val PREF_HAVE_DATABASE = "pref_have_database"

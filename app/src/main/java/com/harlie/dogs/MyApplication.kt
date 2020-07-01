@@ -20,7 +20,7 @@ class MyApplication : MultiDexApplication() {
     }
 
     fun getInstance(): MyApplication? {
-        return Companion.instance
+        return instance
     }
 
     override fun onCreate() {

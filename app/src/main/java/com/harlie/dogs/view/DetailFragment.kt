@@ -88,7 +88,7 @@ class DetailFragment : Fragment() {
         })
     }
 
-    fun refresh() {
+    private fun refresh() {
         Timber.tag(_tag).d("refresh")
         uiScope.launch(Dispatchers.IO) {
             dogDetailViewModel.fetch()

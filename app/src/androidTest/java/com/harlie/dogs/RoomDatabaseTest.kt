@@ -62,7 +62,7 @@ class RoomDatabaseTest {
         println("writeOneDogThenReadOneDog")
         val dogList: List<DogBreed> = TestUtil().createTestDogs(3)
         dogList.forEach {dog ->
-            println("dog: ${dog}")
+            println("dog: $dog")
             runBlocking {
                 db.dogDao().insertAll(dog) // inserts one dog
                 val byId = db.dogDao().getDog(dog.uuid)

@@ -61,7 +61,7 @@ class FragmentTransitionEspressoTest {
             .check(matches(hasDescendant(withText("Hunting bears"))))
             .check(matches(hasDescendant(withText("10 - 14 years"))))
 
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
 
 
         position = 7
@@ -78,7 +78,7 @@ class FragmentTransitionEspressoTest {
             .check(matches(hasDescendant(withText("Sled pulling"))))
             .check(matches(hasDescendant(withText("10 - 13 years"))))
 
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
 
 
         // NOTE: the 124th dogsList item (counting from 0) has id=188 for Pharaoh Hound
@@ -96,10 +96,10 @@ class FragmentTransitionEspressoTest {
             .check(matches(hasDescendant(withText("Hunting rabbits"))))
             .check(matches(hasDescendant(withText("12 - 14 years"))))
 
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
 
 
-        val recyclerView: RecyclerView = activityTestRule.getActivity().findViewById(R.id.dogsList)
+        val recyclerView: RecyclerView = activityTestRule.activity.findViewById(R.id.dogsList)
         val itemCount = recyclerView.adapter!!.itemCount
         position = if (itemCount > 0) itemCount - 1 else 0
 
@@ -116,7 +116,7 @@ class FragmentTransitionEspressoTest {
             .check(matches(hasDescendant(withText("Small vermin hunting"))))
             .check(matches(hasDescendant(withText("12 - 16 years"))))
 
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
     }
 
     @After

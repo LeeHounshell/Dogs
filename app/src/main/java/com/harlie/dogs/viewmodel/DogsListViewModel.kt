@@ -46,7 +46,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     val dogsLoading: LiveData<Boolean>
         get() = dogsMutableLoading
 
-    suspend fun initializeData(context: Context) {
+    private suspend fun initializeData(context: Context) {
         Timber.tag(_tag).d("initializeData")
         if ( !dogsRepository.prefHelper.isDatabaseCreated()) {
             Timber.tag(_tag).d("initializeData: create initial database")
@@ -54,7 +54,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
                 fetchDogsFromDatabase(context).observeForever { dogsList ->
                     Timber.tag(_tag).d("initializeData: observeForever dogsList.size=${dogsList.size}")
                     if (dogsList.isNotEmpty()) {
-                        synchronized (DogDatabase.Companion.GLOBAL_ACCESS_LOCK) {
+                        synchronized (DogDatabase.GLOBAL_ACCESS_LOCK) {
                             dogsRepository.storeDogsLocally(dogsList)
                             dogsMutableList.postValue(dogsList)
                         }
@@ -80,7 +80,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
         }
     }
 
-    suspend fun refresh() {
+    fun refresh() {
         Timber.tag(_tag).d("--------- refresh")
         dogsMutableLoading.postValue(true)
         checkCacheDuration()
@@ -130,7 +130,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     }
 
     // Initiate a Network API call to get the list of DogBreed
-    private suspend fun fetchDogsFromRemote(): LiveData<List<DogBreed>> {
+    private fun fetchDogsFromRemote(): LiveData<List<DogBreed>> {
         Timber.tag(_tag).d("fetchDogsFromRemote")
         return dogsRepository.fetchFromRemote()
     }
@@ -151,7 +151,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     // display initial database creation for first app run
     fun setDogsList(dogsList: List<DogBreed>) {
         Timber.tag(_tag).d("setDogsList: size=${dogsList.size}")
-        dogsMutableList.setValue(dogsList)
+        dogsMutableList.value = dogsList
     }
 
     fun checkIfLoadingIsComplete() {

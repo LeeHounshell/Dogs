@@ -31,7 +31,7 @@ class DogsListViewModelTest {
     @get:Rule
     val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
-    val dummyData = MutableLiveData<List<DogBreed>>().postDefault(TestUtil().createTestDogs(3))
+    private val dummyData = MutableLiveData<List<DogBreed>>().postDefault(TestUtil().createTestDogs(3))
 
     @MockK
     lateinit var apiService: DogsApiService
@@ -40,8 +40,8 @@ class DogsListViewModelTest {
     @MockK
     lateinit var prefHelper: SharedPreferencesHelper
 
-    lateinit var viewModel: DogsListViewModel
-    lateinit var dogsListDataRepository: DogsListDataRepository
+    private lateinit var viewModel: DogsListViewModel
+    private lateinit var dogsListDataRepository: DogsListDataRepository
 
     companion object {
         @BeforeClass

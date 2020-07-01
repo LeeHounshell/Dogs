@@ -13,15 +13,14 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.github.ajalt.timberkt.Timber
 import com.google.gson.Gson
 import com.harlie.dogs.MyApplication
-import com.harlie.dogs.room.DogDatabase
 import org.json.JSONArray
 import java.io.InputStream
 
-const val _tag = "LEE: <UtilityFunctions>"
+const val utag = "LEE: <UtilityFunctions>"
 const val PERMISSION_SEND_SMS = 234
 
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
-    //Timber.tag(_tag).d("getProgressDrawable")
+    //Timber.tag(utag).d("getProgressDrawable")
     return CircularProgressDrawable(context).apply {
         strokeWidth = 10f
         centerRadius = 30f
@@ -31,13 +30,13 @@ fun getProgressDrawable(context: Context): CircularProgressDrawable {
 
 @BindingAdapter("android:imageUrl")
 fun loadImage(view: ImageView, url: String?) {
-    //Timber.tag(_tag).d("loadImage binding")
+    //Timber.tag(utag).d("loadImage binding")
     GlideWrapper().loadImage(view, url, getProgressDrawable(view.context))
 }
 
 @BindingAdapter("bind:image_url")
 fun loadCachedImage(view: ImageView, url: String?) {
-    //Timber.tag(_tag).d("loadCachedImage binding")
+    //Timber.tag(utag).d("loadCachedImage binding")
     GlideWrapper().loadCachedImage(view, url)
 }
 
@@ -46,14 +45,14 @@ fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { setValue(in
 fun <T : Any?> MutableLiveData<T>.postDefault(initialValue: T) = apply { postValue(initialValue) }
 
 fun NavController.navigateSafe(direction: NavDirections) {
-    Timber.tag(_tag).d("navigateSafe")
+    Timber.tag(utag).d("navigateSafe")
     currentDestination?.getAction(direction.actionId)?.let { navigate(direction) }
 }
 
 @Suppress("DEPRECATION")
 fun isNetworkAvailable(): Boolean {
     if (GlideWrapper.isUnitTest) {
-        Timber.tag(_tag).d("isNetworkAvailable false (TESTING)")
+        Timber.tag(utag).d("isNetworkAvailable false (TESTING)")
         return false
     }
     val context = MyApplication.applicationContext()
@@ -65,15 +64,15 @@ fun isNetworkAvailable(): Boolean {
         if (capabilities != null) {
             when {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                    Timber.tag(_tag).d("isNetworkAvailable true")
+                    Timber.tag(utag).d("isNetworkAvailable true")
                     return true
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                    Timber.tag(_tag).d("isNetworkAvailable true")
+                    Timber.tag(utag).d("isNetworkAvailable true")
                     return true
                 }
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                    Timber.tag(_tag).d("isNetworkAvailable true")
+                    Timber.tag(utag).d("isNetworkAvailable true")
                     return true
                 }
             }
@@ -82,11 +81,11 @@ fun isNetworkAvailable(): Boolean {
     else {
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
-            Timber.tag(_tag).d("isNetworkAvailable true")
+            Timber.tag(utag).d("isNetworkAvailable true")
             return true
         }
     }
-    Timber.tag(_tag).d("isNetworkAvailable false")
+    Timber.tag(utag).d("isNetworkAvailable false")
     return false
 }
 
@@ -94,7 +93,7 @@ inline fun <reified T>extractArrayFromJson(rawJson: String?): MutableList<T> {
     val list: MutableList<T> = mutableListOf()
     if (rawJson != null) {
         val array = JSONArray(rawJson)
-        Timber.tag(DogDatabase._tag).d("extractArrayFromJson: processing length=${array.length()}")
+        Timber.tag(utag).d("extractArrayFromJson: processing length=${array.length()}")
         if (array.length() > 0) {
             val gson = Gson()
             var i = 0
@@ -113,7 +112,7 @@ inline fun <reified T>extractArrayFromJson(rawJson: String?): MutableList<T> {
 }
 
 fun readJsonAsset(context: Context, fileName: String): String? {
-    Timber.tag(DogDatabase._tag).d("readJsonAsset: fileName=${fileName}")
+    Timber.tag(utag).d("readJsonAsset: fileName=${fileName}")
     var rawJson: String? = null
     try {
         val inputStream: InputStream = context.assets.open(fileName)

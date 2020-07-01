@@ -36,9 +36,12 @@ class ReleaseTree : Timber.Tree() {
 
     }
 
+/*  FIXME: Crashlytics
     companion object {
         private const val CRASHLYTICS_KEY_PRIORITY = "Priority"
         private const val CRASHLYTICS_KEY_TAG = "Tag"
         private const val CRASHLYTICS_KEY_MESSAGE = "Message"
     }
+*/
+
 }

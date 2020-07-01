@@ -14,7 +14,7 @@ import com.harlie.dogs.util.default
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
-class DogsListDataRepository(val repositoryURL: String, val apiService: DogsApiService, val prefHelper: SharedPreferencesHelper): DataRepository() {
+class DogsListDataRepository(repositoryURL: String, private val apiService: DogsApiService, val prefHelper: SharedPreferencesHelper): DataRepository() {
     private val _tag = "LEE: <" + DogsListDataRepository::class.java.simpleName + ">"
 
     init {

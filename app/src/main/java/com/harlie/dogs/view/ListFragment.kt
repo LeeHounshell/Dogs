@@ -98,7 +98,7 @@ class ListFragment : Fragment() {
         })
     }
 
-    fun showCurrentDogs() {
+    private fun showCurrentDogs() {
         haveUuids = (currentDogs.isNotEmpty() && currentDogs[0].uuid != 0)
         Timber.tag(_tag).d("--------- showCurrentDogs: haveUuids=${haveUuids}")
         if (! haveUuids) {
@@ -116,11 +116,11 @@ class ListFragment : Fragment() {
         }
     }
 
-    fun refresh() {
+    private fun refresh() {
         Timber.tag(_tag).d("refresh")
         Timer("refresh", false).schedule(500) {
             uiScope.launch(Dispatchers.IO) {
-                if (haveUuids && currentDogs.size > 0 && ! isNetworkAvailable()) {
+                if (haveUuids && currentDogs.isNotEmpty() && ! isNetworkAvailable()) {
                     Timber.tag(_tag).d("refresh: NO NETWORK, SHOW EXISTING DATA")
                 }
                 else {

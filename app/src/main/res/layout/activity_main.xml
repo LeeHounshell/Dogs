@@ -25,6 +25,9 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- FIXME: FragmentContainerView does not currently work with data binding
+    <androidx.fragment.app.FragmentContainerView
+    -->
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"

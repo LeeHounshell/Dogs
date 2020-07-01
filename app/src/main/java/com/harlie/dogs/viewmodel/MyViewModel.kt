@@ -14,17 +14,17 @@ open class MyViewModel: ViewModel(), LifecycleOwner {
     init {
         Timber.tag(_tag).d("init")
         lifecycleRegistry = LifecycleRegistry(this)
-        lifecycleRegistry.setCurrentState(Lifecycle.State.CREATED)
+        lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
 
     override fun getLifecycle(): Lifecycle {
-        lifecycleRegistry.setCurrentState(Lifecycle.State.INITIALIZED)
+        lifecycleRegistry.currentState = Lifecycle.State.INITIALIZED
         return lifecycleRegistry
     }
 
     override fun onCleared() {
         Timber.tag(_tag).d("onCleared")
-        lifecycleRegistry.setCurrentState(Lifecycle.State.DESTROYED)
+        lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
     }
 
 }

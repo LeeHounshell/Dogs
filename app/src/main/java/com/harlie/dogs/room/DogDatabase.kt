@@ -17,12 +17,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
 @Database(entities = [DogBreed::class], version = 1)
-abstract class DogDatabase() : RoomDatabase() {
+abstract class DogDatabase : RoomDatabase() {
 
     abstract fun dogDao(): DogDao
 
     companion object {
-        val _tag = "LEE: <" + DogDatabase::class.java.simpleName + ">"
+        val ctag = "LEE: <" + DogDatabase::class.java.simpleName + ">"
 
         @Volatile
         private var INSTANCE: DogDatabase? = null
@@ -33,7 +33,7 @@ abstract class DogDatabase() : RoomDatabase() {
 
         private val roomCallBack: Callback = object : Callback() {
             override fun onCreate(@NonNull db: SupportSQLiteDatabase) {
-                Timber.tag(_tag).d("Callback: onCreate")
+                Timber.tag(ctag).d("Callback: onCreate")
                 super.onCreate(db)
                 GlobalScope.async {
                     loadDatabaseDefaultData(MyApplication.applicationContext())
@@ -42,7 +42,7 @@ abstract class DogDatabase() : RoomDatabase() {
         }
 
         fun getInstance(context: Context): DogDatabase? {
-            Timber.tag(_tag).d("getInstance")
+            Timber.tag(ctag).d("getInstance")
             INSTANCE ?: synchronized(CREATION_LOCK) {
                 INSTANCE ?: buildDatabase(context).also {
                     INSTANCE = it.build()
@@ -68,14 +68,14 @@ abstract class DogDatabase() : RoomDatabase() {
 */
 
         fun loadDatabaseDefaultData(context: Context) {
-            Timber.tag(_tag).d("loadDatabaseDefaultData")
+            Timber.tag(ctag).d("loadDatabaseDefaultData")
             this.PREPOPULATE_DATA = emptyList()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                var rawJson: String? = readJsonAsset(context, "dog_data.json")
-                Timber.tag(_tag).d("loadDatabaseDefaultData: read rawJson length=${rawJson?.length}")
+                val rawJson: String? = readJsonAsset(context, "dog_data.json")
+                Timber.tag(ctag).d("loadDatabaseDefaultData: read rawJson length=${rawJson?.length}")
                 if (rawJson != null) {
                     val list: MutableList<DogBreed> = extractArrayFromJson(rawJson)
-                    Timber.tag(_tag).d("loadDatabaseDefaultData: set PREPOPULATE_DATA with ${list.size} elements")
+                    Timber.tag(ctag).d("loadDatabaseDefaultData: set PREPOPULATE_DATA with ${list.size} elements")
                     this.PREPOPULATE_DATA = list
                     saveDefaultDataToDatabase()
                 }
@@ -83,14 +83,14 @@ abstract class DogDatabase() : RoomDatabase() {
         }
 
         // the first app run creates a default database containing local assets
-        fun saveDefaultDataToDatabase() {
-            Timber.tag(_tag).d("saveDefaultDataToDatabase")
+        private fun saveDefaultDataToDatabase() {
+            Timber.tag(ctag).d("saveDefaultDataToDatabase")
             if (INSTANCE != null && PREPOPULATE_DATA.isNotEmpty()) {
                 GlobalScope.async {
                     val dao = INSTANCE!!.dogDao()
                     val result = dao.insertAll(*PREPOPULATE_DATA.toTypedArray())
                     val message = "result.size=${result.size}"
-                    Timber.tag(_tag).d("saveDefaultDataToDatabase: ${message}")
+                    Timber.tag(ctag).d("saveDefaultDataToDatabase: $message")
                     val roomLoadedEvent = RoomLoadedEvent(message, PREPOPULATE_DATA)
                     roomLoadedEvent.post()
                 }

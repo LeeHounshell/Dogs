@@ -58,7 +58,7 @@ class DogsListAdapter(private val dogsList: ArrayList<DogBreed>)
         }
         catch (e: IllegalStateException) {
             Timber.tag(_tag).e("PROBLEM WITH NAVIGATION e=${e}")
-            val navigationErrorEvent = NavigationErrorEvent("Navigation failed: ${e}")
+            val navigationErrorEvent = NavigationErrorEvent("Navigation failed: $e")
             navigationErrorEvent.post()
         }
     }

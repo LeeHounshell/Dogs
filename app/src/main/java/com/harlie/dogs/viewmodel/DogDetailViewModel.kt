@@ -16,7 +16,7 @@ import com.harlie.dogs.util.RoomErrorEvent
 import com.harlie.dogs.view.MainActivity
 import kotlinx.coroutines.launch
 
-class DogDetailViewModel(val repository: DogDetailDataRepository): MyViewModel() {
+class DogDetailViewModel(private val repository: DogDetailDataRepository): MyViewModel() {
     private val _tag = "LEE: <" + DogDetailViewModel::class.java.simpleName + ">"
 
     var isDeepLink: Boolean = false
@@ -65,7 +65,7 @@ class DogDetailViewModel(val repository: DogDetailDataRepository): MyViewModel()
     }
 
     // FIXME: SmsInfo has an imageUrl but MMS is required to send image data via text. The image is not sent.
-    suspend fun sendSms(smsInfo: SmsInfo) {
+    fun sendSms(smsInfo: SmsInfo) {
         Timber.tag(_tag).d("sendSms smsInfo=${smsInfo}")
         val context = MyApplication.applicationContext()
         val intent = Intent(context, MainActivity::class.java)

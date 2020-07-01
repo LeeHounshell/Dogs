@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config
 import java.net.HttpURLConnection
 
 // use MockWebServer to verify network responses are converted into correct data structures
-@Config(sdk = intArrayOf(27, 28))
+@Config(sdk = [27, 28])
 @RunWith(RobolectricTestRunner::class)
 class TestRetrofitWithMockWebServer {
 
@@ -22,7 +22,7 @@ class TestRetrofitWithMockWebServer {
     private val dogDataJson = "dog_data.json"
     private var dogsCount = 0
 
-    lateinit var content: String
+    private lateinit var content: String
 
     @Before
     fun setup() {
