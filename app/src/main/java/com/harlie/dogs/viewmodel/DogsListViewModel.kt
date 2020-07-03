@@ -20,6 +20,8 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
 
     @Volatile
     var didNetworkRefresh = false
+    @Volatile
+    var currentDogListIndex = 0
 
     private val dogsMutableList by lazy {
         MutableLiveData<List<DogBreed>>()
@@ -27,8 +29,6 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     private val dogsMutableLoading by lazy {
         MutableLiveData<Boolean>()
     }
-
-    var lastClickedDogListIndex = 0
 
     init {
         Timber.tag(_tag).d("init")

@@ -113,7 +113,7 @@ class ListFragment : Fragment() {
             // set adapter data as current dogs list
             dogListAdapter.updateDogList(currentDogs)
             dogsList.visibility = View.VISIBLE
-            dogsList.layoutManager?.scrollToPosition(dogListViewModel.lastClickedDogListIndex)
+            dogsList.layoutManager?.scrollToPosition(dogListViewModel.currentDogListIndex)
         }
     }
 
@@ -175,7 +175,7 @@ class ListFragment : Fragment() {
         Timber.tag(_tag).d("onSaveInstanceState")
         val position = (dogsList.getLayoutManager() as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (position > 0) {
-            dogListViewModel.lastClickedDogListIndex = position
+            dogListViewModel.currentDogListIndex = position
         }
         super.onSaveInstanceState(outState)
     }
@@ -183,7 +183,7 @@ class ListFragment : Fragment() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDogClickedEvent(dogClicked_event: DogClickedEvent) {
         Timber.tag(_tag).d("-onDogClickedEvent- ${dogClicked_event.description} clickIndex=${dogClicked_event.clickIndex} <===")
-        dogListViewModel.lastClickedDogListIndex = dogClicked_event.clickIndex
+        dogListViewModel.currentDogListIndex = dogClicked_event.clickIndex
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
