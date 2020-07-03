@@ -171,6 +171,15 @@ class ListFragment : Fragment() {
         EventBus.getDefault().unregister(this)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        Timber.tag(_tag).d("onSaveInstanceState")
+        val position = (dogsList.getLayoutManager() as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        if (position > 0) {
+            dogListViewModel.lastClickedDogListIndex = position
+        }
+        super.onSaveInstanceState(outState)
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDogClickedEvent(dogClicked_event: DogClickedEvent) {
         Timber.tag(_tag).d("-onDogClickedEvent- ${dogClicked_event.description} clickIndex=${dogClicked_event.clickIndex} <===")
