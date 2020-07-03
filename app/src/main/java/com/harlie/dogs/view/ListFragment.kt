@@ -113,6 +113,7 @@ class ListFragment : Fragment() {
             // set adapter data as current dogs list
             dogListAdapter.updateDogList(currentDogs)
             dogsList.visibility = View.VISIBLE
+            Timber.tag(_tag).d("showCurrentDogs: scrollToPosition ${dogListViewModel.currentDogListIndex}")
             dogsList.layoutManager?.scrollToPosition(dogListViewModel.currentDogListIndex)
         }
     }
