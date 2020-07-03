@@ -173,9 +173,12 @@ class ListFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         Timber.tag(_tag).d("onSaveInstanceState")
-        val position = (dogsList.getLayoutManager() as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-        if (position > 0) {
-            dogListViewModel.currentDogListIndex = position
+        if (dogsList != null && dogsList.layoutManager != null) {
+            val position =
+                (dogsList.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+            if (position > 0) {
+                dogListViewModel.currentDogListIndex = position
+            }
         }
         super.onSaveInstanceState(outState)
     }
