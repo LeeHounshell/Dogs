@@ -9,7 +9,7 @@ import com.harlie.dogs.model.DogsApiService
 import com.harlie.dogs.room.DogDatabase
 import com.harlie.dogs.util.SharedPreferencesHelper
 
-class DogDetailDataRepository(private val dogId: Int, apiService: DogsApiService, prefHelper: SharedPreferencesHelper): DataRepository() {
+class DogDetailDataRepository(private val dogId: String, apiService: DogsApiService, prefHelper: SharedPreferencesHelper): DataRepository() {
     private val _tag = "LEE: <" + DogDetailDataRepository::class.java.simpleName + ">"
 
     init {

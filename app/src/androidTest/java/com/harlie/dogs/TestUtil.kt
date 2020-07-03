@@ -8,7 +8,7 @@ class TestUtil {
         val dogsList = ArrayList<DogBreed>()
         var i = 1
         while (i <= count) {
-            val dog = DogBreed("id$i", "name$i", "lifespan$i", "group$i", "purpose$i", "temperament$i", "image$i" )
+            val dog = DogBreed("$i", "name$i", "lifespan$i", "group$i", "purpose$i", "temperament$i", "image$i" )
             dog.uuid = i
             dogsList.add(dog)
             ++i

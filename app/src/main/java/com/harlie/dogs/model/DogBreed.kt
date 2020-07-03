@@ -2,10 +2,11 @@ package com.harlie.dogs.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(indices = [Index(value = ["breed_id"], unique = true)])
 data class DogBreed(
     @ColumnInfo(name = "breed_id")
     @SerializedName("id")
@@ -45,5 +46,5 @@ data class SmsInfo(
     var to: String,
     var text: String,
     var imageUrl: String?,
-    val uuid: Int?
+    val breedId: String?
 )

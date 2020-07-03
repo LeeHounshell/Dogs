@@ -65,8 +65,10 @@ class RoomDatabaseTest {
             println("dog: $dog")
             runBlocking {
                 db.dogDao().insertAll(dog) // inserts one dog
-                val byId = db.dogDao().getDog(dog.uuid)
-                assertThat(byId.uuid, equalTo(dog.uuid))
+                val breedId = dog.breedId
+                assert(breedId != null)
+                val byId = db.dogDao().getDog(breedId!!)
+                assertThat(byId.breedId, equalTo(dog.breedId))
             }
         }
     }

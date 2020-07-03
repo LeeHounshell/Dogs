@@ -19,7 +19,7 @@ class DogsListViewModel(repository: DogsListDataRepository): MyViewModel() {
     private var refreshTime = 5 * 60 * 1000 * 1000 * 1000L // 5 minutes in nanoseconds
 
     @Volatile
-    private var didNetworkRefresh = false
+    var didNetworkRefresh = false
 
     private val dogsMutableList by lazy {
         MutableLiveData<List<DogBreed>>()

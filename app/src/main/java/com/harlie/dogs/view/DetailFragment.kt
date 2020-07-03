@@ -31,7 +31,7 @@ class DetailFragment : Fragment() {
 
     private lateinit var dogDetailViewModel: DogDetailViewModel
     private lateinit var dataBinding: FragmentDetailBinding
-    private var dogUuid = 0
+    private var dogBreedId = "1"
     private var deepLink = false
     private var startedSendSMS = false
     private var currentDog: DogBreed? = null
@@ -54,14 +54,14 @@ class DetailFragment : Fragment() {
         Timber.tag(_tag).d("onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         arguments?.let { bundle ->
-            dogUuid = DetailFragmentArgs.fromBundle(bundle).dogUuid
+            dogBreedId = DetailFragmentArgs.fromBundle(bundle).dogBreedId
             deepLink = bundle.getBoolean("deep_link", false)
         }
-        Timber.tag(_tag).d("dogUuid=${dogUuid}")
+        Timber.tag(_tag).d("dogBreedId=${dogBreedId}")
         Timber.tag(_tag).d("deepLink=${deepLink}")
         val apiService = DogsApiService()
         val prefHelper = SharedPreferencesHelper()
-        val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogUuid, apiService, prefHelper))
+        val viewModelFactory = MyViewModelFactory(DogDetailDataRepository(dogBreedId, apiService, prefHelper))
         dogDetailViewModel =
             ViewModelProvider(this, viewModelFactory).get(DogDetailViewModel::class.java)
         dogDetailViewModel.isDeepLink = deepLink
@@ -134,7 +134,7 @@ class DetailFragment : Fragment() {
                     "",
                     "The ${currentDog?.breedName} is bred for ${currentDog?.breedPurpose}",
                     currentDog?.breedImageUrl,
-                    currentDog?.uuid
+                    currentDog?.breedId
                 )
                 val dialogBinding = DataBindingUtil.inflate<SendSmsDialogBinding>(
                     LayoutInflater.from(it),

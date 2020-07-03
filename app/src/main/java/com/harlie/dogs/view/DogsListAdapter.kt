@@ -45,15 +45,15 @@ class DogsListAdapter(private val dogsList: ArrayList<DogBreed>)
     class DogViewHolder(var view: ItemDogsBinding): RecyclerView.ViewHolder(view.root)
 
     override fun onDogClicked(view: View) {
-        val uuid = view.dogId.text.toString().toInt()
+        val breedId = view.dogId.text.toString()
         val recyclerView = view.parent as RecyclerView
         val position = recyclerView.getChildAdapterPosition(view)
-        Timber.tag(_tag).d("-CLICK- uuid=${uuid} position=${position}")
+        Timber.tag(_tag).d("-CLICK- breedId=${breedId} position=${position}")
         try {
             val dogClickedEvent = DogClickedEvent(view.dogName.text.toString(), position)
             dogClickedEvent.post()
             val action = ListFragmentDirections.actionListFragmentToDetailFragment()
-            action.dogUuid = uuid
+            action.dogBreedId = breedId
             view.findNavController().navigate(action)
         }
         catch (e: IllegalStateException) {

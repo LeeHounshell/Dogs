@@ -69,6 +69,7 @@ class ListFragment : Fragment() {
             dogsList.visibility = View.INVISIBLE
             dogsLoadingProgress.visibility = View.VISIBLE
             refreshLayout.isRefreshing = false
+            dogListViewModel.didNetworkRefresh = false
             refresh()
         }
 

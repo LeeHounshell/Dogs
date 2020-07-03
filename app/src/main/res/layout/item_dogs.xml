@@ -24,7 +24,7 @@
             android:id="@+id/dogId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(dog.uuid)}"
+            android:text="@{dog.breedId}"
             android:visibility="gone" />
 
         <com.harlie.dogs.util.CenterBottomImageView

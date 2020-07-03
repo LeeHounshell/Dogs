@@ -27,7 +27,7 @@ class NotificationsHelper(val context: Context) {
 
         // pass a Navigation argument to the DetailFragment
         val bundle = Bundle()
-        bundle.putInt("dog_Uuid", dog.uuid)
+        bundle.putString("dog_BreedId", dog.breedId)
         bundle.putBoolean("deep_link", true)
 
         // use NavDeepLinkBuilder to open a specific destination
@@ -61,7 +61,7 @@ class NotificationsHelper(val context: Context) {
             .setAutoCancel(true)
             .build()
 
-        NotificationManagerCompat.from(context).notify(dog.uuid, notification) // use a different Notification Id for each Detail view
+        NotificationManagerCompat.from(context).notify(dog.breedId!!.toInt(), notification) // use a different Notification Id for each Detail view
     }
 
     private fun createNotificationChannel() {
